@@ -46,7 +46,7 @@ export async function designSystemComponentGenerator(
     // generate the part component files
     generateFiles(
       tree,
-      path.join(__dirname, 'files'),
+      path.join(import.meta.dirname, 'files'),
       `${componentRoot}/parts`,
       {
         directoryName: `${componentPartOf}/parts`,
@@ -62,7 +62,7 @@ export async function designSystemComponentGenerator(
     // generate the main component files
     generateFiles(
       tree,
-      path.join(__dirname, 'files'),
+      path.join(import.meta.dirname, 'files'),
       componentRoot,
       {
         directoryName,

@@ -1,7 +1,7 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing.js';
 import { Tree } from '@nx/devkit';
 
-import { designSystemComponentGenerator } from './design-system-component.js';
+import { designSystemComponentGenerator } from './design-system-component.ts';
 import type { DesignSystemComponentGeneratorSchema } from './schema.d.ts';
 
 const createProject = () => {

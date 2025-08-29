@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "design-system-component": {
+      "factory": "./dist/generators/design-system-component/design-system-component",
+      "schema": "./dist/generators/design-system-component/schema.json",
+      "description": "design-system-component generator"
+    }
+  }
+}

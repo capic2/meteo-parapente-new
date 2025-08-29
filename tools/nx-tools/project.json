@@ -1,0 +1,32 @@
+{
+  "name": "@meteo-parapente-new/nx-tools",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/nx-tools/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "tools/nx-tools/dist",
+        "main": "tools/nx-tools/src/index.ts",
+        "tsConfig": "tools/nx-tools/tsconfig.lib.json",
+        "rootDir": "tools/nx-tools/src",
+        "generatePackageJson": false,
+        "assets": [
+          {
+            "input": "./tools/nx-tools/src",
+            "glob": "**/!(*.ts)",
+            "output": "."
+          },
+          {
+            "input": "./tools/nx-tools/src",
+            "glob": "**/*.d.ts",
+            "output": "."
+          }
+        ]
+      }
+    }
+  }
+}

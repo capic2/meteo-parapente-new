@@ -1,0 +1,29 @@
+import { forwardRef } from 'react'
+
+import type { PropsWithChildren } from 'react'
+import type { VariantProps } from 'tailwind-variants'
+
+import { tv } from 'tailwind-variants'
+
+export const <%= componentVariantName %> = tv({
+  // add the component styles
+  base: '',
+})
+
+export interface <%= componentName %>Props
+    extends PropsWithChildren<VariantProps<typeof <%= componentVariantName %>>> {
+  // add the component props here
+}
+
+const <%= componentName %> = forwardRef<HTMLDivElement, <%= componentName %>Props>(({ children, ...props }, ref) => {
+    return (
+      <div ref={ref} className={<%= componentVariantName %>()} {...props}>
+        {children}
+      </div>
+    )
+  },
+)
+
+<%= componentName %>.displayName = '<%= componentName %>'
+
+export { <%= componentName %> }

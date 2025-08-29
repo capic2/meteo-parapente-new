@@ -5,6 +5,19 @@
   "references": [
     {
       "path": "./apps/meteo-parapente-new"
+    },
+    {
+      "path": "./libs/design-system"
+    },
+    {
+      "path": "./tools/nx-tools"
     }
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "NodeNext",
+      "moduleResolution": "bundler",
+      "customConditions": null
+    }
+  }
 }

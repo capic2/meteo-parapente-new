@@ -1,6 +1,14 @@
 import nx from '@nx/eslint-plugin';
+import importPlugin from 'eslint-plugin-import';
+import pluginUnicorn from 'eslint-plugin-unicorn';
 
 export default [
+  {
+    plugins: {
+      import: importPlugin,
+      unicorn: pluginUnicorn,
+    },
+  },
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
@@ -9,6 +17,7 @@ export default [
       '**/dist',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
+      '**/test-output',
     ],
   },
   {
@@ -27,6 +36,23 @@ export default [
           ],
         },
       ],
+      'import/extensions': [
+        'error',
+        'ignorePackages',
+        {
+          js: 'always',
+          ts: 'always',
+          jsx: 'always',
+          tsx: 'always',
+        },
+      ],
+    },
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    plugins: { unicorn: pluginUnicorn },
+    rules: {
+      'unicorn/prefer-module': 'error',
     },
   },
   {

@@ -1,49 +1,46 @@
-import NxWelcome from './nx-welcome';
+import {
+  DataTable,
+  DataTableBody,
+  DataTableColumn,
+  DataTableHeader,
+} from '@meteo-parapente-new/design-system';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+import ky from 'ky';
+import { z } from 'zod';
 
-import { Route, Routes, Link } from 'react-router-dom';
+const meteoSchema = z.record(
+  z.string().regex(/[0-9]{2} - [0-9]{2}/),
+  z.object({ meteoBlue: z.object({}), meteoParapente: z.object({}) })
+);
+
+const meteoOptions = () => {
+  return queryOptions({
+    queryKey: ['meteo'],
+    queryFn: async () => {
+      const response = await ky.get('/meteo');
+      return z.parse(meteoSchema, await response.json());
+    },
+  });
+};
 
 export function App() {
-  return (
-    <div>
-      <NxWelcome title="@meteo-parapente-new/meteo-parapente-new" />
+  const { data } = useQuery(meteoOptions());
 
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
-      <div role="navigation">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/page-2">Page 2</Link>
-          </li>
-        </ul>
-      </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              This is the generated root route.{' '}
-              <Link to="/page-2">Click here for page 2.</Link>
-            </div>
-          }
-        />
-        <Route
-          path="/page-2"
-          element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
-            </div>
-          }
-        />
-      </Routes>
-      {/* END: routes */}
-    </div>
+  if (!data) {
+    return <div className="flex h-screen items-center justify-center">No data...</div>;
+  }
+
+  return (
+    <DataTable>
+      <DataTableHeader>
+        {Object.keys(data).map((range) => (
+          <DataTableColumn>{range}</DataTableColumn>
+        ))}
+      </DataTableHeader>
+      <DataTableBody>
+
+      </DataTableBody>
+    </DataTable>
   );
 }
 

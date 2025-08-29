@@ -1,0 +1,11 @@
+{
+  "name": "@meteo-parapente-new/meteo-parapente-new",
+  "$schema": "../../node_modules/nx/schemas/nx-schema.json",
+  "sourceRoot": "apps/meteo-parapente-new/src",
+  "projectType": "application",
+  "targets": {
+    "storybook": {
+      "dependsOn": ["^build" , "build"]
+    }
+  }
+}

@@ -4,6 +4,8 @@ import { Preview } from '@storybook/react-vite';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { meteo } from '../mocks/meteo.ts';
 import '../src/styles.css';
+import { IntlProvider } from 'react-intl';
+import fr from '../i18n/fr-FR.json';
 
 void initialize();
 
@@ -21,7 +23,9 @@ const preview: Preview = {
     (Story) => {
       return (
         <QueryClientProvider client={new QueryClient()}>
-          <Story />
+          <IntlProvider locale="fr-FR" messages={fr}>
+            <Story />
+          </IntlProvider>
         </QueryClientProvider>
       );
     },

@@ -1,24 +1,15 @@
-import {
-  DataTable,
-  DataTableBody,
-  DataTableColumn,
-  DataTableHeader,
-} from '@meteo-parapente-new/design-system';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 import ky from 'ky';
 import { z } from 'zod';
-
-const meteoSchema = z.record(
-  z.string().regex(/[0-9]{2} - [0-9]{2}/),
-  z.object({ meteoBlue: z.object({}), meteoParapente: z.object({}) })
-);
+import { meteoSchema } from '../types/schemas.ts';
+import { MeteoDataTable } from '../components/meteo-data-table/MeteoDataTable.tsx';
 
 const meteoOptions = () => {
   return queryOptions({
     queryKey: ['meteo'],
     queryFn: async () => {
       const response = await ky.get('/meteo');
-      return z.parse(meteoSchema, await response.json());
+      return z.safeParse(meteoSchema, await response.json());
     },
   });
 };
@@ -27,21 +18,26 @@ export function App() {
   const { data } = useQuery(meteoOptions());
 
   if (!data) {
-    return <div className="flex h-screen items-center justify-center">No data...</div>;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        Bad response
+      </div>
+    );
   }
 
-  return (
-    <DataTable>
-      <DataTableHeader>
-        {Object.keys(data).map((range) => (
-          <DataTableColumn>{range}</DataTableColumn>
-        ))}
-      </DataTableHeader>
-      <DataTableBody>
+  if (data.error) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        {data.error.message}
+      </div>
+    );
+  }
 
-      </DataTableBody>
-    </DataTable>
-  );
+  if (!data.data) {
+    return <div>No data</div>;
+  }
+
+  return <MeteoDataTable meteoResponse={data.data} />;
 }
 
 export default App;

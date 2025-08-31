@@ -28,7 +28,8 @@
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx",
     "mocks/**/*.ts",
-    "mocks/**/*.js"
+    "mocks/**/*.js",
+    "i18n/**/*.json"
   ],
   "references": [
     {

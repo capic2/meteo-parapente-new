@@ -5,3 +5,4 @@ export * from './components/data-table/parts/DataTableColumn.js';
 export * from './components/data-table/parts/DataTableHeader.js';
 export * from './components/data-table/parts/DataTableRow.js';
 export * from './components/data-table/parts/DataTableRowHeader.js';
+export * from './components/tooltip/Tooltip.js';

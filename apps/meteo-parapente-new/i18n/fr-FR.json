@@ -1,0 +1,12 @@
+{
+  "app.meteo.rain": "Pluie",
+  "app.meteo.wind": "Vent",
+  "app.meteo.temperature": "Température",
+  "app.meteo.meteo-blue.wind.direction": "Direction du vent",
+  "app.meteo.meteo-blue.wind.speed": "Vitesse du vent",
+  "app.meteo.meteo-blue.wind.gust": "Rafales du vent",
+  "app.meteo.meteo-parapente.wind.direction": "Direction du vent",
+  "app.meteo.meteo-parapente.wind.speed": "Vitesse du vent",
+  "app.meteo.meteo-parapente.wind.gust": "Rafales du vent",
+  "app.meteo.clouds": "Nuages"
+}

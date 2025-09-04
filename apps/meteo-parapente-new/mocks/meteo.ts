@@ -1,4 +1,4 @@
-import { MeteoType } from '../src/types/schemas.ts';
+import { MeteoType } from '@meteo-parapente-new/common-types';
 
 export const meteo: MeteoType = {
   structure: {

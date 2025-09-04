@@ -6,16 +6,15 @@ import {
   DataTableRow,
   DataTableRowHeader,
 } from '@meteo-parapente-new/design-system';
-import { MeteoType } from '../../types/schemas.ts';
 import { MeteoDataTableCell } from './parts/MeteoDataTableCell.tsx';
 import { FormattedMessage } from 'react-intl';
+import { MeteoType } from '@meteo-parapente-new/common-types';
 
 interface MeteoDataTableProps {
   meteoResponse: MeteoType;
 }
 
 const MeteoDataTable = ({ meteoResponse }: MeteoDataTableProps) => {
-
   return (
     <DataTable>
       <DataTableHeader>

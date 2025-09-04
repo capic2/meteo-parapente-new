@@ -1,10 +1,8 @@
 {
+  "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
   "references": [
-    {
-      "path": "../../libs/design-system"
-    },
     {
       "path": "../../libs/common-types"
     },
@@ -13,10 +11,6 @@
     },
     {
       "path": "./tsconfig.spec.json"
-    },
-    {
-      "path": "./tsconfig.storybook.json"
     }
-  ],
-  "extends": "../../tsconfig.base.json"
+  ]
 }

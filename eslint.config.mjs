@@ -1,11 +1,11 @@
 import nx from '@nx/eslint-plugin';
-import importPlugin from 'eslint-plugin-import';
+//import importPlugin from 'eslint-plugin-import';
 import pluginUnicorn from 'eslint-plugin-unicorn';
 
 export default [
   {
     plugins: {
-      import: importPlugin,
+      //import: importPlugin,
       unicorn: pluginUnicorn,
     },
   },
@@ -36,7 +36,7 @@ export default [
           ],
         },
       ],
-      'import/extensions': [
+      /*'import/extensions': [
         'error',
         'ignorePackages',
         {
@@ -45,7 +45,7 @@ export default [
           jsx: 'always',
           tsx: 'always',
         },
-      ],
+      ],*/
     },
   },
   {

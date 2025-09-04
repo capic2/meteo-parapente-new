@@ -11,6 +11,12 @@
     },
     {
       "path": "./tools/nx-tools"
+    },
+    {
+      "path": "./apps/meteo-parapente-new-server"
+    },
+    {
+      "path": "./libs/common-types"
     }
   ],
   "ts-node": {

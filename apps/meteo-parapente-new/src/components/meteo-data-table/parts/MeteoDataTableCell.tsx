@@ -1,9 +1,10 @@
-import { DataTableCell, Tooltip } from '@meteo-parapente-new/design-system';
 import {
   MeteoProperty,
   MeteoPropertyWithSubPropertiesType,
   MeteoType,
-} from '../../../types/schemas.ts';
+} from '@meteo-parapente-new/common-types';
+import { DataTableCell, Tooltip } from '@meteo-parapente-new/design-system';
+
 import { FormattedMessage } from 'react-intl';
 
 interface MeteoDataTableCellProps {

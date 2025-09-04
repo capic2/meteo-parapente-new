@@ -42,6 +42,9 @@
   "references": [
     {
       "path": "../../libs/design-system/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/common-types/tsconfig.lib.json"
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { getMeteoParapenteData } from './meteoParapente';
 import { describe, expect, it } from 'vitest';
-import { MeteoStandardProviderStructure } from '../../types.ts';
+import { MeteoStandardProviderStructure } from '../../types';
 
 describe('meteoParapente', () => {
   it('should return data', async () => {

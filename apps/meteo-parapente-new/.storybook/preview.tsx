@@ -2,7 +2,7 @@ import { initialize, mswLoader } from 'storybook-msw-addon';
 import { http, HttpResponse } from 'msw';
 import { Preview } from '@storybook/react-vite';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { meteo } from '../mocks/meteo.ts';
+import { meteo } from '../mocks/meteo';
 import '../src/styles.css';
 import { IntlProvider } from 'react-intl';
 import fr from '../i18n/fr-FR.json';

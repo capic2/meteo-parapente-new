@@ -6,8 +6,8 @@ import {
   Tree,
 } from '@nx/devkit';
 import * as path from 'path';
-import type { DesignSystemComponentGeneratorSchema } from './schema.d.ts';
-import { registerComponent } from './lib/registerComponent.ts';
+import type { DesignSystemComponentGeneratorSchema } from './schema';
+import { registerComponent } from './lib/registerComponent';
 
 function normalizeOptions(options: DesignSystemComponentGeneratorSchema) {
   const nameInput = options.name.trim();

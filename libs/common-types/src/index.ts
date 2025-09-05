@@ -1,1 +1,1 @@
-export * from './meteoResponse.js';
+export * from './meteoResponse';

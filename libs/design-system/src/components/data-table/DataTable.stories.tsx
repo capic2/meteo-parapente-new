@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DataTable } from './DataTable.js';
-import { DataTableHeader } from './parts/DataTableHeader.js';
-import { DataTableRow } from './parts/DataTableRow.js';
-import { DataTableColumn } from './parts/DataTableColumn.js';
-import { DataTableBody } from './parts/DataTableBody.js';
-import { DataTableCell } from './parts/DataTableCell.js';
-import { DataTableRowHeader } from './parts/DataTableRowHeader.js';
+import { DataTable } from './DataTable';
+import { DataTableHeader } from './parts/DataTableHeader';
+import { DataTableRow } from './parts/DataTableRow';
+import { DataTableColumn } from './parts/DataTableColumn';
+import { DataTableBody } from './parts/DataTableBody';
+import { DataTableCell } from './parts/DataTableCell';
+import { DataTableRowHeader } from './parts/DataTableRowHeader';
 
 const meta = {
   component: DataTable,

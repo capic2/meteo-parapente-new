@@ -1,9 +1,9 @@
 import type { Tree } from '@nx/devkit'
 
-import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing.js'
+import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import { registerComponent } from './registerComponent.js'
+import { registerComponent } from './registerComponent'
 
 describe('registerComponent', () => {
   let tree: Tree
@@ -47,7 +47,7 @@ describe('registerComponent', () => {
     expect(indexFileContent).toMatchInlineSnapshot(`
       "
           export * from './test/Test'
-          
+
       export * from './my-component/MyComponent'"
     `)
   })

@@ -1,6 +1,6 @@
 // vitest.setup.ts
 import { beforeAll, afterEach, afterAll } from 'vitest'
-import { server } from './mocks/node.js'
+import { server } from './mocks/node'
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())

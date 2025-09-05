@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Tooltip } from './Tooltip.js';
+import { Tooltip } from './Tooltip';
 
 const meta = {
   component: Tooltip,

@@ -1,5 +1,5 @@
 import {
-  MeteoProperty,
+  MeteoPropertyType,
   MeteoPropertyWithSubPropertiesType,
   MeteoType,
 } from '@meteo-parapente-new/common-types';
@@ -24,7 +24,7 @@ const renderValue = ({
   range,
 }: {
   label: string;
-  valuesByProvider: MeteoProperty;
+  valuesByProvider: MeteoPropertyType;
   range: string;
 }) => {
   return (

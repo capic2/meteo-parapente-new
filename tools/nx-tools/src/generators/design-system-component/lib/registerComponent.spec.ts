@@ -47,7 +47,7 @@ describe('registerComponent', () => {
     expect(indexFileContent).toMatchInlineSnapshot(`
       "
           export * from './test/Test'
-
+          
       export * from './my-component/MyComponent'"
     `)
   })

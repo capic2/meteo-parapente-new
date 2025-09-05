@@ -1,7 +1,7 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 import ky from 'ky';
 import { z } from 'zod';
-import { MeteoDataTable } from '../components/meteo-data-table/MeteoDataTable.tsx';
+import { MeteoDataTable } from '../components/meteo-data-table/MeteoDataTable';
 import { meteoSchema } from '@meteo-parapente-new/common-types';
 
 const meteoOptions = () => {

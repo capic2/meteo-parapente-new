@@ -6,7 +6,7 @@ import {
   DataTableRow,
   DataTableRowHeader,
 } from '@meteo-parapente-new/design-system';
-import { MeteoDataTableCell } from './parts/MeteoDataTableCell.tsx';
+import { MeteoDataTableCell } from './parts/MeteoDataTableCell';
 import { FormattedMessage } from 'react-intl';
 import { MeteoType } from '@meteo-parapente-new/common-types';
 

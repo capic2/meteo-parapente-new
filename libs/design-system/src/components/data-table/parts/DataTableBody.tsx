@@ -2,7 +2,7 @@ import { ForwardedRef, forwardRef, JSX } from 'react';
 import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
 import { TableBody, TableBodyProps } from 'react-aria-components';
-import { DataTableRowProps } from './DataTableRow.tsx';
+import { DataTableRowProps } from './DataTableRow';
 
 export const dataTableBody = tv({
   // add the component styles

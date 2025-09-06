@@ -1,7 +1,7 @@
 import { MeteoType } from '@meteo-parapente-new/common-types';
 import { app } from './app/app';
 import Fastify from 'fastify';
-import { describe, expect, it, beforeAll, afterAll } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { pinoConfig } from './app/utils/logger';
 
 describe('main', () => {

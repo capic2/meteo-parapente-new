@@ -31,7 +31,7 @@ const renderValue = ({
     <div className="grid grid-cols-2 gap-x-2">
       <div className="flex gap-1">
         <Tooltip content={<FormattedMessage id={label} />}>
-          <span>{valuesByProvider.ranges[range].meteoBlue}</span>
+          <span>{valuesByProvider.ranges?.[range].meteoBlue}</span>
         </Tooltip>
         {valuesByProvider.unit && (
           <span className="text-xs self-center">{valuesByProvider.unit}</span>
@@ -39,7 +39,7 @@ const renderValue = ({
       </div>
       <div className="flex gap-1">
         <Tooltip content={<FormattedMessage id={label} />}>
-          <span>{valuesByProvider.ranges[range].meteoParapente}</span>
+          <span>{valuesByProvider.ranges?.[range].meteoParapente}</span>
         </Tooltip>
         {valuesByProvider.unit && (
           <span className="text-xs self-center">{valuesByProvider.unit}</span>

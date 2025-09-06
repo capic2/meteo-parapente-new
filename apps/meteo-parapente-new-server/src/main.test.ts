@@ -2,10 +2,11 @@ import { MeteoType } from '@meteo-parapente-new/common-types';
 import { app } from './app/app';
 import Fastify from 'fastify';
 import { describe, expect, it, beforeAll, afterAll } from 'vitest';
+import { pinoConfig } from './app/utils/logger';
 
 describe('main', () => {
   const server = Fastify({
-    logger: true,
+    logger: pinoConfig,
   });
 
   beforeAll(async () => {
@@ -17,7 +18,7 @@ describe('main', () => {
 
   it('returns 200', async () => {
     const response = await server.inject(
-      'http://localhost:3000/?lat=46.971161&lon=5.885981'
+      'http://localhost/?startDate=2025-08-19&lat=46.971161&lon=5.885981'
     );
 
     expect(response.statusCode).toBe(200);
@@ -26,87 +27,92 @@ describe('main', () => {
   it('returns data', async () => {
     const response = server.inject({
       method: 'GET',
-      url:'/?lat=46.971161&lon=5.885981'}
-    );
+      url: '/?startDate=2025-08-19&lat=46.971161&lon=5.885981',
+    });
 
     const expected: MeteoType = {
-      structure: {
-        hourRanges: ['09-12', '12-16', '16-19'],
-        properties: ['wind', 'rain'],
-      },
       data: {
+        clouds: {
+          label: 'app.meteo.app.meteo.clouds',
+        },
+        rain: {
+          label: 'app.meteo.app.meteo.rain',
+          ranges: {
+            '09-12': {
+              meteoBlue: 0,
+              meteoParapente: 0.3,
+            },
+            '12-16': {
+              meteoBlue: 0.16,
+              meteoParapente: 0.2,
+            },
+            '16-19': {
+              meteoBlue: 1.53,
+              meteoParapente: 4.1,
+            },
+          },
+          unit: 'mm',
+        },
+        temperature: {
+          label: 'app.meteo.app.meteo.temperature',
+        },
         wind: {
-          label: 'app.meteo.wind',
+          label: 'app.meteo.app.meteo.wind',
           properties: {
             direction: {
-              label: 'app.meteo.meteo-blue.wind.direction',
+              label: 'app.meteo.app.meteo.meteo-blue.wind.direction',
               ranges: {
                 '09-12': {
-                  meteoBlue: 'N',
-                  meteoParapente: 'N',
+                  meteoBlue: ['S', 'W', 'W', 'SW'],
+                  meteoParapente: ['E', 'NE', 'N', 'NE'],
                 },
                 '12-16': {
-                  meteoBlue: 'N',
-                  meteoParapente: 'N',
+                  meteoBlue: ['SW', 'W', 'W', 'SW', 'SW'],
+                  meteoParapente: ['NE', 'NE', 'NE', 'N', 'SW'],
                 },
                 '16-19': {
-                  meteoBlue: 'N',
-                  meteoParapente: 'N',
-                },
-              },
-            },
-            speed: {
-              label: 'app.meteo.meteo-blue.wind.speed',
-              unit: 'km/h',
-              ranges: {
-                '09-12': {
-                  meteoBlue: 2.5,
-                  meteoParapente: 2.5,
-                },
-                '12-16': {
-                  meteoBlue: 2.5,
-                  meteoParapente: 2.5,
-                },
-                '16-19': {
-                  meteoBlue: 2.5,
-                  meteoParapente: 2.5,
+                  meteoBlue: ['SW', 'SW', 'SW', 'SW'],
+                  meteoParapente: ['SW', 'SW', 'W', 'SW'],
                 },
               },
             },
             gust: {
-              label: 'app.meteo.meteo-blue.wind.gust',
+              label: 'app.meteo.app.meteo.meteo-blue.wind.gust',
               ranges: {
                 '09-12': {
-                  meteoBlue: 3.6,
+                  meteoBlue: 19.8,
                 },
                 '12-16': {
-                  meteoBlue: 3.6,
+                  meteoBlue: 35.892,
                 },
                 '16-19': {
-                  meteoBlue: 3.6,
+                  meteoBlue: 35.892,
+                },
+              },
+            },
+            speed: {
+              label: 'app.meteo.app.meteo.meteo-blue.wind.speed',
+              ranges: {
+                '09-12': {
+                  meteoBlue: 2.69,
+                  meteoParapente: 10.63067260336805,
+                },
+                '12-16': {
+                  meteoBlue: 5.22,
+                  meteoParapente: 10.63067260336805,
+                },
+                '16-19': {
+                  meteoBlue: 5.22,
+                  meteoParapente: 20.969806866063408,
                 },
               },
             },
           },
         },
-        rain: {
-          label: 'app.meteo.rain',
-          unit: 'mm',
-          ranges: {
-            '09-12': {
-              meteoBlue: 0,
-              meteoParapente: 0,
-            },
-            '12-16': {
-              meteoBlue: 0,
-              meteoParapente: 0,
-            },
-            '16-19': {
-              meteoBlue: 0,
-              meteoParapente: 0,
-            },
-          },
-        },
+      },
+      structure: {
+        hourRanges: ['09-12', '12-16', '16-19'],
+        properties: ['wind', 'rain', 'clouds', 'temperature'],
       },
     };
 

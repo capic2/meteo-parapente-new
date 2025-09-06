@@ -2,13 +2,14 @@ import { FastifyInstance } from 'fastify';
 import { getMeteoBlueData } from '../meteo/meteoBlue';
 import { MeteoType } from '@meteo-parapente-new/common-types';
 import { getMeteoParapenteData } from '../meteo/meteoParapente';
+import { MeteoStandardProviderStructure } from '../../types';
 
 export default async function (fastify: FastifyInstance) {
   fastify.get<{
-    Querystring: { lat: number; lon: number };
-    Reply: MeteoType | null;
-  }>('/', async function (request) {
-    const { lat, lon } = request.query;
+    Querystring: { lat: number; lon: number, startDate: string };
+    Reply: MeteoType | null | string;
+  }>('/', async function (request, reply) {
+    const { lat, lon, startDate } = request.query;
     const properties = {
       wind: {
         label: 'app.meteo.wind',
@@ -41,20 +42,37 @@ export default async function (fastify: FastifyInstance) {
 
     //todo: récupérer les hourRanges depuis la query
     const hourRanges = ['09-12', '12-16', '16-19'];
-    //todo: récupérer la date depuis la query
-    const date = new Date();
-    const meteoBlueData = await getMeteoBlueData({
+    const date = new Date(startDate);
+
+    const meteoBlueDataPromise = getMeteoBlueData({
       latitude: lat,
       longitude: lon,
       hourRanges,
       date,
     });
-    const meteoParapenteData = await getMeteoParapenteData({
+
+    const meteoParapenteDataPromise = getMeteoParapenteData({
       latitude: lat,
       longitude: lon,
       hourRanges,
       date,
     });
+
+    let meteoBlueData: MeteoStandardProviderStructure | null = null;
+    let meteoParapenteData: MeteoStandardProviderStructure | null = null;
+    try {
+      [meteoBlueData, meteoParapenteData] = await Promise.all([
+        meteoBlueDataPromise,
+        meteoParapenteDataPromise,
+      ]);
+    } catch (e) {
+      if (e instanceof Error) {
+        fastify.log.error(e.stack);
+        return reply.code(500).send(JSON.stringify(e.message));
+      }
+
+      return reply.code(500);
+    }
 
     if (!meteoBlueData || !meteoParapenteData) {
       return null;
@@ -73,8 +91,11 @@ export default async function (fastify: FastifyInstance) {
               hourRanges.map((hourRange) => [
                 hourRange,
                 {
-                  meteoBlue: meteoBlueData[key] && meteoBlueData[key][hourRange],
-                  meteoParapente: meteoParapenteData[key] && meteoParapenteData[key][hourRange],
+                  meteoBlue:
+                    meteoBlueData[key] && meteoBlueData[key][hourRange],
+                  meteoParapente:
+                    meteoParapenteData[key] &&
+                    meteoParapenteData[key][hourRange],
                 },
               ])
             ),
@@ -91,10 +112,16 @@ export default async function (fastify: FastifyInstance) {
                       hourRanges.map((hourRange) => [
                         hourRange,
                         {
-                          // @ts-expect-error normalization
-                          meteoBlue: meteoBlueData[key] && meteoBlueData[key][propertyKey] && meteoBlueData[key][propertyKey][hourRange],
-                          // @ts-expect-error normalization
-                          meteoParapente: meteoParapenteData[key] && meteoParapenteData[key][propertyKey] && meteoParapenteData[key][propertyKey][hourRange],
+                          meteoBlue:
+                            meteoBlueData[key] &&
+                            meteoBlueData[key][propertyKey] &&
+                            // @ts-expect-error to fix
+                            meteoBlueData[key][propertyKey][hourRange],
+                          meteoParapente:
+                            meteoParapenteData[key] &&
+                            meteoParapenteData[key][propertyKey] &&
+                            // @ts-expect-error to fix
+                            meteoParapenteData[key][propertyKey][hourRange],
                         },
                       ])
                     ),

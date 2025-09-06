@@ -1,7 +1,7 @@
 import ky from 'ky';
 import { z } from 'zod';
 import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc';
-import { MeteoProperty, MeteoStandardProviderStructure } from '../../types';
+import { MeteoStandardProviderStructure } from '../../types';
 import { logger } from '../utils/logger';
 
 const meteoBlueBasic1hDaySchema = z.object({
@@ -106,24 +106,26 @@ const meteoBlueWindSchema = z.object({
     windspeed_80m: z.number().array(),
     gust: z.number().array(),
   }),
-  data_day: z.object({
-    time: z.string().array(),
-    windspeed_80m_mean: z.number().array(),
-    gust_max: z.number().array(),
-    winddirection_80m: z.number().array(),
-    indexto1hvalues_start: z.number().array(),
-    surfaceairpressure_max: z.number().array(),
-    airdensity_min: z.number().array(),
-    windspeed_80m_max: z.number().array(),
-    gust_mean: z.number().array(),
-    windspeed_80m_min: z.number().array(),
-    surfaceairpressure_min: z.number().array(),
-    surfaceairpressure_mean: z.number().array(),
-    airdensity_max: z.number().array(),
-    indexto1hvalues_end: z.number().array(),
-    airdensity_mean: z.number().array(),
-    gust_min: z.number().array(),
-  }).optional(),
+  data_day: z
+    .object({
+      time: z.string().array(),
+      windspeed_80m_mean: z.number().array(),
+      gust_max: z.number().array(),
+      winddirection_80m: z.number().array(),
+      indexto1hvalues_start: z.number().array(),
+      surfaceairpressure_max: z.number().array(),
+      airdensity_min: z.number().array(),
+      windspeed_80m_max: z.number().array(),
+      gust_mean: z.number().array(),
+      windspeed_80m_min: z.number().array(),
+      surfaceairpressure_min: z.number().array(),
+      surfaceairpressure_mean: z.number().array(),
+      airdensity_max: z.number().array(),
+      indexto1hvalues_end: z.number().array(),
+      airdensity_mean: z.number().array(),
+      gust_min: z.number().array(),
+    })
+    .optional(),
 });
 
 const getPeridotData = (
@@ -276,6 +278,16 @@ export const getMeteoBlueData = async ({
     hourRanges
   );
 
+  logger.debug(
+    { file: 'meteoBlue', function: 'getMeteoBlueData' },
+    `windData: ${JSON.stringify(windData)}`
+  );
+
+  logger.debug(
+    { file: 'meteoBlue', function: 'getMeteoBlueData' },
+    `basicData: ${JSON.stringify(basicData)}`
+  );
+
   if (!windData || !basicData) {
     return null;
   }
@@ -283,25 +295,31 @@ export const getMeteoBlueData = async ({
   const dateKey = formatDateYYYYMMDD(date);
 
   const result: MeteoStandardProviderStructure = {
-    rain: hourRanges.reduce((acc, hourRange) => {
-      acc[hourRange] = basicData[dateKey][hourRange].precipitation;
-      return acc;
-    }, {} as MeteoProperty),
+    rain: Object.fromEntries(
+      hourRanges.map((hourRange) => [
+        hourRange,
+        basicData[dateKey][hourRange].precipitation,
+      ])
+    ),
     wind: {
-      direction: hourRanges.reduce((acc, hourRange) => {
-        acc[hourRange] = windData[dateKey][hourRange].winddirection_80m;
-        return acc;
-      }, {} as MeteoProperty),
-
-      speed: hourRanges.reduce((acc, hourRange) => {
-        acc[hourRange] = windData[dateKey][hourRange].maxWindspeed_80m;
-        return acc;
-      }, {} as MeteoProperty),
-
-      gust: hourRanges.reduce((acc, hourRange) => {
-        acc[hourRange] = windData[dateKey][hourRange].maxGust;
-        return acc;
-      }, {} as MeteoProperty),
+      direction: Object.fromEntries(
+        hourRanges.map((hourRange) => [
+          hourRange,
+          windData[dateKey][hourRange].winddirection_80m,
+        ])
+      ),
+      speed: Object.fromEntries(
+        hourRanges.map((hourRange) => [
+          hourRange,
+          windData[dateKey][hourRange].maxWindspeed_80m,
+        ])
+      ),
+      gust: Object.fromEntries(
+        hourRanges.map((hourRange) => [
+          hourRange,
+          windData[dateKey][hourRange].maxGust,
+        ])
+      ),
     },
   };
 

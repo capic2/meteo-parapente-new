@@ -1,6 +1,6 @@
-import { MeteoDataType } from '@meteo-parapente-new/common-types';
+import { MeteoPropertyValueType } from '@meteo-parapente-new/common-types';
 
-export type MeteoProperty = Record<string, MeteoDataType>;
+export type MeteoProperty = Record<string, MeteoPropertyValueType>;
 
 export type MeteoStandardProviderStructure = Record<
   string,

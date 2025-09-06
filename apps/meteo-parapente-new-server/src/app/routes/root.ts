@@ -1,12 +1,13 @@
 import { FastifyInstance } from 'fastify';
 import { getMeteoBlueData } from '../meteo/meteoBlue';
-import { MeteoType } from '@meteo-parapente-new/common-types';
+import { MeteoDataType, MeteoType } from '@meteo-parapente-new/common-types';
 import { getMeteoParapenteData } from '../meteo/meteoParapente';
 import { MeteoStandardProviderStructure } from '../../types';
+import { formatDateYYYYMMDD } from '../utils/misc';
 
 export default async function (fastify: FastifyInstance) {
   fastify.get<{
-    Querystring: { lat: number; lon: number, startDate: string };
+    Querystring: { lat: number; lon: number; startDate: string };
     Reply: MeteoType | null | string;
   }>('/', async function (request, reply) {
     const { lat, lon, startDate } = request.query;
@@ -78,11 +79,13 @@ export default async function (fastify: FastifyInstance) {
       return null;
     }
 
-    const data: MeteoType['data'] = {};
+    const data: MeteoType['data'] = {
+      [formatDateYYYYMMDD(date)]: {},
+    };
 
     for (const [key, property] of Object.entries(properties)) {
       //@ts-expect-error to fix
-      const dataProperty: MeteoType['data'][keyof MeteoType['data']] = {
+      const dataProperty: MeteoDataType[keyof MeteoDataType] = {
         label: 'app.meteo.' + property.label,
         ...(key in meteoBlueData /*|| key in meteoParapenteData*/ && {
           ...('unit' in property && { unit: property.unit }),
@@ -132,7 +135,7 @@ export default async function (fastify: FastifyInstance) {
           }),
         }),
       };
-      data[key] = dataProperty;
+      data[formatDateYYYYMMDD(date)][key] = dataProperty;
     }
     const meteoResponse: MeteoType = {
       structure: {

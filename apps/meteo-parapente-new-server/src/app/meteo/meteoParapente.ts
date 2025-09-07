@@ -68,7 +68,10 @@ const getMeteoParapenteDataForOneDay = async (
   hourRanges: string[]
 ) => {
   const url = `https://data0.meteo-parapente.com/data.php?run=${date}00&location=${lat},${lon}&date=${date}&plot=windgram`;
-logger.info({ file: 'meteoParapente', function: 'getMeteoParapenteDataForOneDay' }, `fetching data from ${url}`);
+  logger.info(
+    { file: 'meteoParapente', function: 'getMeteoParapenteDataForOneDay' },
+    `fetching data from ${url}`
+  );
   const response = await ky.get(url);
   const json = await response.json();
   const meteoParapenteResponse = meteoParapenteSchema.safeParse(json);
@@ -89,6 +92,12 @@ logger.info({ file: 'meteoParapente', function: 'getMeteoParapenteDataForOneDay'
   for (const hourRange of hourRanges) {
     const start = Number(hourRange.split('-')[0]) - utcOffset;
     const end = Number(hourRange.split('-')[1]) - utcOffset;
+
+    console.log(start, end);
+    logger.info(
+      { file: 'meteoParapente', function: 'getMeteoParapenteDataForOneDay' },
+      `hour start: ${start}, hour end: ${end}`
+    );
 
     const computedData = Array.from(
       { length: Math.floor(end - start) + 1 },

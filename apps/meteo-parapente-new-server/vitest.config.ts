@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(() => ({
   test: {
-    setupFiles: ['vitest.setup.ts'],
+    setupFiles: ['./vitest.setup.ts'],
     name: '@meteo-parapente-new/meteo-parapente-new-server',
     watch: false,
     globals: true,

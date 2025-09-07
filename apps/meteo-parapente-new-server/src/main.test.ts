@@ -18,7 +18,7 @@ describe('main', () => {
 
   it('returns 200', async () => {
     const response = await server.inject(
-      'http://localhost/?startDate=2025-08-19&lat=46.971161&lon=5.885981'
+      '/meteo?startDate=20250819&lat=46.971161&lon=5.885981'
     );
 
     expect(response.statusCode).toBe(200);
@@ -27,16 +27,16 @@ describe('main', () => {
   it('returns data', async () => {
     const response = server.inject({
       method: 'GET',
-      url: '/?startDate=2025-08-19&lat=46.971161&lon=5.885981',
+      url: '/meteo?startDate=20250819&lat=46.971161&lon=5.885981',
     });
 
     const expected: MeteoType = {
       data: {
         clouds: {
-          label: 'app.meteo.app.meteo.clouds',
+          label: 'app.meteo.clouds',
         },
         rain: {
-          label: 'app.meteo.app.meteo.rain',
+          label: 'app.meteo.rain',
           ranges: {
             '09-12': {
               meteoBlue: 0,
@@ -54,13 +54,13 @@ describe('main', () => {
           unit: 'mm',
         },
         temperature: {
-          label: 'app.meteo.app.meteo.temperature',
+          label: 'app.meteo.temperature',
         },
         wind: {
-          label: 'app.meteo.app.meteo.wind',
+          label: 'app.meteo.wind',
           properties: {
             direction: {
-              label: 'app.meteo.app.meteo.meteo-blue.wind.direction',
+              label: 'app.meteo.meteo-blue.wind.direction',
               ranges: {
                 '09-12': {
                   meteoBlue: ['S', 'W', 'W', 'SW'],
@@ -77,7 +77,7 @@ describe('main', () => {
               },
             },
             gust: {
-              label: 'app.meteo.app.meteo.meteo-blue.wind.gust',
+              label: 'app.meteo.meteo-blue.wind.gust',
               ranges: {
                 '09-12': {
                   meteoBlue: 19.8,
@@ -89,9 +89,10 @@ describe('main', () => {
                   meteoBlue: 35.892,
                 },
               },
+              unit: 'km/h',
             },
             speed: {
-              label: 'app.meteo.app.meteo.meteo-blue.wind.speed',
+              label: 'app.meteo.meteo-blue.wind.speed',
               ranges: {
                 '09-12': {
                   meteoBlue: 2.69,
@@ -106,6 +107,7 @@ describe('main', () => {
                   meteoParapente: 20.969806866063408,
                 },
               },
+              unit: 'km/h',
             },
           },
         },

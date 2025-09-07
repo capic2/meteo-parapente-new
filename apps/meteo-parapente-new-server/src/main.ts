@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import { app } from './app/app';
 import { pinoConfig } from './app/utils/logger';
+import cors from '@fastify/cors';
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
@@ -9,6 +10,7 @@ const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 const server = Fastify({
   logger: pinoConfig,
 });
+server.register(cors);
 
 // Register your application as a normal plugin.
 server.register(app);

@@ -156,6 +156,8 @@ const getMeteoBlueWindData = async (
   hourRanges: string[]
 ) => {
   const url = `https://my.meteoblue.com/packages/wind-1h?lat=${lat}&lon=${lon}&apikey=yI64pdgFs0abhT8k&windspeed=kmh`;
+  logger.info({ file: 'meteoBlue', function: 'getMeteoBlueWindData' }, `fetching data from ${url}`);
+
   const response = ky.get(url);
   const json = await response.json();
   const meteoBlueWindResponse = meteoBlueWindSchema.safeParse(json);
@@ -211,6 +213,7 @@ const getMeteoBlueBasicData = async (
   hourRanges: string[]
 ) => {
   const url = `https://my.meteoblue.com/packages/basic-1h_basic-day?lat=${lat}&lon=${lon}&apikey=yI64pdgFs0abhT8k`;
+  logger.info({ file: 'meteoBlue', function: 'getMeteoBlueBasicData' }, `fetching data from ${url}`);
   const response = await ky.get(url);
 
   const meteoBlueBasic1hDayData = meteoBlueBasic1hDaySchema.parse(

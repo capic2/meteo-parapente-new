@@ -68,7 +68,7 @@ const getMeteoParapenteDataForOneDay = async (
   hourRanges: string[]
 ) => {
   const url = `https://data0.meteo-parapente.com/data.php?run=${date}00&location=${lat},${lon}&date=${date}&plot=windgram`;
-
+logger.info({ file: 'meteoParapente', function: 'getMeteoParapenteDataForOneDay' }, `fetching data from ${url}`);
   const response = await ky.get(url);
   const json = await response.json();
   const meteoParapenteResponse = meteoParapenteSchema.safeParse(json);

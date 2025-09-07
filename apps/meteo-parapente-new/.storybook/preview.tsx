@@ -2,7 +2,7 @@ import { initialize, mswLoader } from 'storybook-msw-addon';
 import { http, HttpResponse } from 'msw';
 import { Preview } from '@storybook/react-vite';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { meteo } from '../mocks/meteo';
+import meteoJsonMock from '../mocks/meteo.json' with { type: 'json' };
 import '../src/styles.css';
 import { IntlProvider } from 'react-intl';
 import fr from '../i18n/fr-FR.json';
@@ -13,8 +13,8 @@ const preview: Preview = {
   parameters: {
     msw: {
       handlers: [
-        http.get('/meteo', () => {
-          return HttpResponse.json(meteo);
+        http.get(`http://localhost:3000/meteo`, () => {
+          return HttpResponse.json(meteoJsonMock);
         }),
       ],
     },

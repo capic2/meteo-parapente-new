@@ -28,6 +28,7 @@
     ".storybook/**/*.tsx",
     "mocks/**/*.ts",
     "mocks/**/*.js",
+    "mocks/**/*.json",
     "i18n/**/*.json"
   ],
   "references": [

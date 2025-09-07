@@ -1,0 +1,116 @@
+{
+  "structure": {
+    "hourRanges": ["09-12", "12-16", "16-19"],
+    "properties": ["wind", "rain", "clouds", "temperature"]
+  },
+  "data": {
+    "wind": {
+      "label": "app.meteo.wind",
+      "properties": {
+        "windDirection": {
+          "label": "app.meteo.meteo-blue.wind.direction",
+          "ranges": {
+            "09-12": {
+              "meteoBlue": "N",
+              "meteoParapente": "N"
+            },
+            "12-16": {
+              "meteoBlue": "N",
+              "meteoParapente": "N"
+            },
+            "16-19": {
+              "meteoBlue": "N",
+              "meteoParapente": "N"
+            }
+          }
+        },
+        "windSpeed": {
+          "label": "app.meteo.meteo-blue.wind.speed",
+          "unit": "km/h",
+          "ranges": {
+            "09-12": {
+              "meteoBlue": 2.5,
+              "meteoParapente": 2.5
+            },
+            "12-16": {
+              "meteoBlue": 2.5,
+              "meteoParapente": 2.5
+            },
+            "16-19": {
+              "meteoBlue": 2.5,
+              "meteoParapente": 2.5
+            }
+          }
+        },
+        "gust": {
+          "label": "app.meteo.meteo-blue.wind.gust",
+          "unit": "km/h",
+          "ranges": {
+            "09-12": {
+              "meteoBlue": 3.6
+            },
+            "12-16": {
+              "meteoBlue": 3.6
+            },
+            "16-19": {
+              "meteoBlue": 3.6
+            }
+          }
+        }
+      }
+    },
+    "rain": {
+      "label": "app.meteo.rain",
+      "unit": "mm",
+      "ranges": {
+        "09-12": {
+          "meteoBlue": 0,
+          "meteoParapente": 0
+        },
+        "12-16": {
+          "meteoBlue": 0,
+          "meteoParapente": 0
+        },
+        "16-19": {
+          "meteoBlue": 0,
+          "meteoParapente": 0
+        }
+      }
+    },
+    "clouds": {
+      "label": "app.meteo.clouds",
+      "ranges": {
+        "09-12": {
+          "meteoBlue": 0,
+          "meteoParapente": 0
+        },
+        "12-16": {
+          "meteoBlue": 0,
+          "meteoParapente": 0
+        },
+        "16-19": {
+          "meteoBlue": 0,
+          "meteoParapente": 0
+        }
+      }
+    },
+    "temperature": {
+      "label": "app.meteo.temperature",
+      "unit": "°C",
+      "ranges": {
+        "09-12": {
+          "meteoBlue": 0,
+          "meteoParapente": 0
+        },
+        "12-16": {
+          "meteoBlue": 0,
+          "meteoParapente": 0
+        },
+        "16-19": {
+          "meteoBlue": 0,
+          "meteoParapente": 0
+        }
+      }
+    }
+  }
+}

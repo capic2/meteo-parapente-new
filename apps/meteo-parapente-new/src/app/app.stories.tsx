@@ -16,7 +16,7 @@ export const NoData: Story = {
   parameters: {
     msw: {
       handlers: [
-        http.get('/meteo', () => {
+        http.get(`http://localhost:3000/meteo`, () => {
           return new Response(null, { status: 204 });
         }),
       ],

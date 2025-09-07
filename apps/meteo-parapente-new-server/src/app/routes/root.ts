@@ -6,9 +6,9 @@ import { MeteoStandardProviderStructure } from '../../types';
 
 export default async function (fastify: FastifyInstance) {
   fastify.get<{
-    Querystring: { lat: number; lon: number, startDate: string };
+    Querystring: { lat: number; lon: number; startDate: string };
     Reply: MeteoType | null | string;
-  }>('/', async function (request, reply) {
+  }>('/meteo', async function (request, reply) {
     const { lat, lon, startDate } = request.query;
     const properties = {
       wind: {
@@ -42,7 +42,13 @@ export default async function (fastify: FastifyInstance) {
 
     //todo: récupérer les hourRanges depuis la query
     const hourRanges = ['09-12', '12-16', '16-19'];
-    const date = new Date(startDate);
+    const date = new Date(
+      new Date(
+        Number(startDate.slice(0, 4)),
+        Number(startDate.slice(4, 6)) - 1,
+        Number(startDate.slice(6, 8))
+      )
+    );
 
     const meteoBlueDataPromise = getMeteoBlueData({
       latitude: lat,
@@ -81,55 +87,56 @@ export default async function (fastify: FastifyInstance) {
     const data: MeteoType['data'] = {};
 
     for (const [key, property] of Object.entries(properties)) {
-      //@ts-expect-error to fix
+      // @ts-expect-error to fix
       const dataProperty: MeteoType['data'][keyof MeteoType['data']] = {
-        label: 'app.meteo.' + property.label,
+        label: property.label,
         ...(key in meteoBlueData /*|| key in meteoParapenteData*/ && {
           ...('unit' in property && { unit: property.unit }),
-          ...(!('properties' in property) && {
-            ranges: Object.fromEntries(
-              hourRanges.map((hourRange) => [
-                hourRange,
-                {
-                  meteoBlue:
-                    meteoBlueData[key] && meteoBlueData[key][hourRange],
-                  meteoParapente:
-                    meteoParapenteData[key] &&
-                    meteoParapenteData[key][hourRange],
-                },
-              ])
-            ),
-          }),
-          ...('properties' in property && {
-            properties: Object.fromEntries(
-              Object.entries(property['properties']).map(
-                ([propertyKey, propertyValue]) => [
-                  propertyKey,
-                  {
-                    label: 'app.meteo.' + propertyValue.label,
-                    ...('unit' in property && { unit: property.unit }),
-                    ranges: Object.fromEntries(
-                      hourRanges.map((hourRange) => [
-                        hourRange,
-                        {
-                          meteoBlue:
-                            meteoBlueData[key] &&
-                            meteoBlueData[key][propertyKey] &&
-                            // @ts-expect-error to fix
-                            meteoBlueData[key][propertyKey][hourRange],
-                          meteoParapente:
-                            meteoParapenteData[key] &&
-                            meteoParapenteData[key][propertyKey] &&
-                            // @ts-expect-error to fix
-                            meteoParapenteData[key][propertyKey][hourRange],
-                        },
-                      ])
-                    ),
-                  },
-                ]
-              )
-            ),
-          }),
+          ...('properties' in property
+            ? {
+                properties: Object.fromEntries(
+                  Object.entries(property['properties']).map(
+                    ([propertyKey, propertyValue]) => [
+                      propertyKey,
+                      {
+                        label: propertyValue.label,
+                        ...('unit' in propertyValue && { unit: propertyValue.unit }),
+                        ranges: Object.fromEntries(
+                          hourRanges.map((hourRange) => [
+                            hourRange,
+                            {
+                              meteoBlue:
+                                meteoBlueData[key] &&
+                                meteoBlueData[key][propertyKey] &&
+                                // @ts-expect-error to fix
+                                meteoBlueData[key][propertyKey][hourRange],
+                              meteoParapente:
+                                meteoParapenteData[key] &&
+                                meteoParapenteData[key][propertyKey] &&
+                                // @ts-expect-error to fix
+                                meteoParapenteData[key][propertyKey][hourRange],
+                            },
+                          ])
+                        ),
+                      },
+                    ]
+                  )
+                ),
+              }
+            : {
+                ranges: Object.fromEntries(
+                  hourRanges.map((hourRange) => [
+                    hourRange,
+                    {
+                      meteoBlue:
+                        meteoBlueData[key] && meteoBlueData[key][hourRange],
+                      meteoParapente:
+                        meteoParapenteData[key] &&
+                        meteoParapenteData[key][hourRange],
+                    },
+                  ])
+                ),
+              }),
         }),
       };
       data[key] = dataProperty;

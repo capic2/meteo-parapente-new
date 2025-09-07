@@ -88,12 +88,12 @@ const getMeteoParapenteDataForOneDay = async (
     {};
 
   const utcOffset = -new Date().getTimezoneOffset() / 60;
+  console.log(`date ${new Date()}, offset ${utcOffset}`);
 
   for (const hourRange of hourRanges) {
     const start = Number(hourRange.split('-')[0]) - utcOffset;
     const end = Number(hourRange.split('-')[1]) - utcOffset;
 
-    console.log(start, end);
     logger.info(
       { file: 'meteoParapente', function: 'getMeteoParapenteDataForOneDay' },
       `hour start: ${start}, hour end: ${end}`

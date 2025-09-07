@@ -5,7 +5,7 @@
   "scripts": {},
   "private": true,
   "dependencies": {
-    "@fastify/autoload": "~6.0.3",
+    "@fastify/autoload": "~6.3.0",
     "@fastify/cors": "^11.1.0",
     "@fastify/sensible": "~6.0.2",
     "@nx/devkit": "21.4.1",

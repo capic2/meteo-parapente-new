@@ -1,7 +1,7 @@
 import { MeteoType } from '@meteo-parapente-new/common-types';
 import { app } from './app/app';
 import Fastify from 'fastify';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { pinoConfig } from './app/utils/logger';
 
 describe('main', () => {
@@ -12,9 +12,14 @@ describe('main', () => {
   beforeAll(async () => {
     server.register(app);
     await server.listen();
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2025-08-19T02:00:00.000Z'))
   });
 
-  afterAll(() => server.close());
+  afterAll(() => {
+    server.close();
+    vi.useRealTimers()
+  });
 
   it('returns 200', async () => {
     const response = await server.inject(

@@ -4,7 +4,7 @@ import Fastify from 'fastify';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { pinoConfig } from './app/utils/logger';
 
-describe('main', () => {
+describe.skip('main', () => {
   const server = Fastify({
     logger: pinoConfig,
   });

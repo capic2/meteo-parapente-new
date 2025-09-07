@@ -1,21 +1,15 @@
 import {
   MeteoPropertyType,
-  MeteoPropertyWithSubPropertiesType,
   MeteoType,
 } from '@meteo-parapente-new/common-types';
 import { DataTableCell, Tooltip } from '@meteo-parapente-new/design-system';
 
 import { FormattedMessage } from 'react-intl';
+import { isPropertyWithSubProperties } from '../../../utils/misc';
 
 interface MeteoDataTableCellProps {
   data: MeteoType['data'][number];
   range: string;
-}
-
-function isPropertyWithSubProperties(
-  data: MeteoDataTableCellProps['data']
-): data is MeteoPropertyWithSubPropertiesType {
-  return 'properties' in data;
 }
 
 const renderProviderValue = ({
@@ -24,7 +18,7 @@ const renderProviderValue = ({
   range,
   provider,
 }: {
-  "label": string;
+  label: string;
   valuesByProvider: MeteoPropertyType;
   range: string;
   provider: 'meteoBlue' | 'meteoParapente';
@@ -54,7 +48,7 @@ const renderValue = ({
   valuesByProvider,
   range,
 }: {
-  "label": string;
+  label: string;
   valuesByProvider: MeteoPropertyType;
   range: string;
 }) => {
@@ -85,7 +79,7 @@ const MeteoDataTableCell = ({ data, range }: MeteoDataTableCellProps) => {
             {Object.entries(data.properties).map(([key, value]) => {
               const propertyName = key as keyof (typeof data)['properties'];
               return renderValue({
-                "label": data.properties[propertyName].label,
+                label: data.properties[propertyName].label,
                 valuesByProvider: value,
                 range,
               });
@@ -93,7 +87,7 @@ const MeteoDataTableCell = ({ data, range }: MeteoDataTableCellProps) => {
           </>
         ) : (
           renderValue({
-            "label": data.label,
+            label: data.label,
             valuesByProvider: data,
             range,
           })

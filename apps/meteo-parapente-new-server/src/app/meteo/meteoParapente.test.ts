@@ -1,23 +1,14 @@
 import { getMeteoParapenteData } from './meteoParapente';
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { MeteoStandardProviderStructure } from '../../types';
 
 describe('meteoParapente', () => {
-  beforeAll(async () => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date('2025-08-19 00:00:00 GMT+2'));
-  });
-
-  afterAll(() => {
-    vi.useRealTimers();
-  });
-
   it('should return data', async () => {
     const data = await getMeteoParapenteData({
       latitude: 46.971161,
       longitude: 5.885981,
       hourRanges: ['09-12', '12-16', '16-19'],
-      date: new Date('2025-08-19'),
+      date: new Date('2025-08-19 00:00:00 GMT+2'),
     });
 
     const expected: MeteoStandardProviderStructure = {

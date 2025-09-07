@@ -13,11 +13,7 @@ describe('main', () => {
     server.register(app);
     await server.listen();
     vi.useFakeTimers();
-    vi.setSystemTime(
-      new Date(new Date('2025-08-19').toLocaleDateString('en-US', {
-        timeZone: 'Europe/Brussels',
-      })
-    ));
+    vi.setSystemTime(new Date('2025-08-19 00:00:00 GMT+2'));
   });
 
   afterAll(() => {

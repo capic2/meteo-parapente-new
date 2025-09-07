@@ -12,13 +12,17 @@ describe('main', () => {
   beforeAll(async () => {
     server.register(app);
     await server.listen();
-    vi.useFakeTimers()
-    vi.setSystemTime(new Date('2025-08-19T02:00:00.000Z'))
+    vi.useFakeTimers();
+    vi.setSystemTime(
+      new Date(new Date('2025-08-19').toLocaleDateString('en-US', {
+        timeZone: 'Europe/Brussels',
+      })
+    ));
   });
 
   afterAll(() => {
     server.close();
-    vi.useRealTimers()
+    vi.useRealTimers();
   });
 
   it('returns 200', async () => {

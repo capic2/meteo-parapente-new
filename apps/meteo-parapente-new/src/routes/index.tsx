@@ -7,10 +7,14 @@ import ky from 'ky';
 import { z } from 'zod';
 import { formatDateYYYYMMDD } from '../utils/misc';
 
-const meteoOptions = (startDate: string) =>
+const meteoOptions = (startDate: string | undefined) =>
   queryOptions({
     queryKey: ['meteo'],
     queryFn: async () => {
+      if (!startDate) {
+        throw new Error('startDate is required');
+      }
+
       const response = await ky.get(
         `${
           import.meta.env.VITE_API_URL

@@ -1,14 +1,14 @@
-import App from './app';
+import { Index } from '../routes';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { http } from 'msw';
 
 const meta = {
-  component: App,
+  component: Index,
   title: 'App',
-} satisfies Meta<typeof App>;
+} satisfies Meta<typeof Index>;
 export default meta;
 
-type Story = StoryObj<typeof App>;
+type Story = StoryObj<typeof Index>;
 
 export const Primary: Story = {};
 

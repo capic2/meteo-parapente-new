@@ -12,8 +12,8 @@ export const paginationLink = tv({
   base: '',
   variants: {
     isActive: {
-      true: 'font-medium hover:font-semibold',
-      false: 'font-normal hover:text-medium cursor-pointer',
+      true: 'font-medium',
+      false: 'font-light hover:text-medium cursor-pointer',
     },
   },
 });

@@ -4,8 +4,7 @@ import { tv } from 'tailwind-variants';
 import { Cell, CellProps } from 'react-aria-components';
 
 export const dataTableCell = tv({
-  // add the component styles
-  base: '',
+  base: 'p-2',
 });
 
 export type DataTableCellProps = VariantProps<typeof dataTableCell> & CellProps;

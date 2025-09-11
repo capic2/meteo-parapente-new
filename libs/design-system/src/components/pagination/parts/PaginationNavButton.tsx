@@ -8,10 +8,10 @@ export const paginationNavButton = tv({
   base: '',
   variants: {
     isDisabled: {
-      true: 'cursor-not-allowed',
+      true: 'cursor-not-allowed text-gray-400',
       false: 'cursor-pointer',
     },
-  }
+  },
 });
 
 export interface PaginationNavButtonProps
@@ -28,7 +28,7 @@ const PaginationNavButton = forwardRef<
   return (
     <Button
       ref={ref}
-      className={paginationNavButton()}
+      className={paginationNavButton({ isDisabled })}
       isDisabled={isDisabled}
       {...rest}
     >

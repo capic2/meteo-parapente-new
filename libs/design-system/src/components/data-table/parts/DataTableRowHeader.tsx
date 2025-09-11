@@ -7,7 +7,7 @@ import { tv } from 'tailwind-variants';
 import { Column } from 'react-aria-components';
 
 export const dataTableRowHeader = tv({
-  base: "bg-gray-50 group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+  base: "bg-gray-50 group px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
 });
 
 export type DataTableRowHeaderProps = PropsWithChildren<
@@ -15,13 +15,13 @@ export type DataTableRowHeaderProps = PropsWithChildren<
 >;
 
 const DataTableRowHeader = forwardRef<HTMLDivElement, DataTableRowHeaderProps>(
-  ({ children, ...props }, ref) => {
+  ({ children, ...rest }, ref) => {
     return (
       <Column
         isRowHeader={true}
         ref={ref}
         className={dataTableRowHeader()}
-        {...props}
+        {...rest}
       >
         {children}
       </Column>

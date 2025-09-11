@@ -11,16 +11,16 @@
           "label": "app.meteo.meteo-blue.wind.direction",
           "ranges": {
             "09-12": {
-              "meteoBlue": "N",
-              "meteoParapente": "N"
+              "meteoBlue": ["N","N","N"],
+              "meteoParapente": ["N","N","N"]
             },
             "12-16": {
-              "meteoBlue": "N",
-              "meteoParapente": "N"
+              "meteoBlue": ["N","N","N","N"],
+              "meteoParapente": ["N","N","N","N"]
             },
             "16-19": {
-              "meteoBlue": "N",
-              "meteoParapente": "N"
+              "meteoBlue": ["N","N","N"],
+              "meteoParapente": ["N","N","N"]
             }
           }
         },

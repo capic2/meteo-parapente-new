@@ -32,3 +32,22 @@ export const Default: Story = {
     // complete the args!
   },
 };
+
+export const Previous: Story = {
+  args: {
+    variant: 'previous',
+  },
+};
+
+export const Next: Story = {
+  args: {
+    variant: 'next',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    variant: 'previous',
+    isDisabled: true,
+  },
+};

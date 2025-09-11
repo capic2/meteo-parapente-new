@@ -32,6 +32,24 @@ export const Primary: Story = {
           <DataTableCell>Cell 1</DataTableCell>
           <DataTableCell>Cell 1</DataTableCell>
         </DataTableRow>
+        <DataTableRow>
+          <DataTableRowHeader>Header B</DataTableRowHeader>
+          <DataTableCell>Cell 2</DataTableCell>
+          <DataTableCell>Cell 2</DataTableCell>
+          <DataTableCell>Cell 2</DataTableCell>
+        </DataTableRow>
+        <DataTableRow>
+          <DataTableRowHeader>Header C</DataTableRowHeader>
+          <DataTableCell>Cell 3</DataTableCell>
+          <DataTableCell>Cell 3</DataTableCell>
+          <DataTableCell>Cell 3</DataTableCell>
+        </DataTableRow>
+        <DataTableRow>
+          <DataTableRowHeader>Header D</DataTableRowHeader>
+          <DataTableCell>Cell 4</DataTableCell>
+          <DataTableCell>Cell 4</DataTableCell>
+          <DataTableCell>Cell 4</DataTableCell>
+        </DataTableRow>
       </DataTableBody>
     </DataTable>
   ),

@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { meteoSchema } from '@meteo-parapente-new/common-types';
 import { FormattedDate } from 'react-intl';
@@ -30,22 +30,15 @@ const meteoOptions = (startDate: string | undefined) =>
 
 export const Route = createFileRoute('/')({
   loaderDeps: ({ search: { startDate } }) => ({ startDate }),
-  loader: ({ context, deps }) => {
-    if (!deps.startDate) {
-      return redirect({
-        to: '/',
-        search: { startDate: formatDateYYYYMMDD(new Date()) },
-      });
-    }
-
-    return context.queryClient.ensureQueryData(meteoOptions(deps.startDate));
-  },
+  loader: ({ context, deps }) =>
+    context.queryClient.ensureQueryData(meteoOptions(deps.startDate)),
   component: Index,
   validateSearch: z.object({
     startDate: z
       .string()
       .regex(/^\d{4}\d{2}\d{2}$/)
-      .optional(),
+      .optional()
+      .default(formatDateYYYYMMDD(new Date())),
   }),
 });
 

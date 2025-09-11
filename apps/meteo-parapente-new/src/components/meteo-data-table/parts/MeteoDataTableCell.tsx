@@ -73,7 +73,7 @@ const renderValue = ({
 const MeteoDataTableCell = ({ data, range }: MeteoDataTableCellProps) => {
   return (
     <DataTableCell>
-      <div>
+      <div className="flex flex-col gap-2">
         {isPropertyWithSubProperties(data) ? (
           <>
             {Object.entries(data.properties).map(([key, value]) => {

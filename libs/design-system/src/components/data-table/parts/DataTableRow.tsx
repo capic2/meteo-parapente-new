@@ -4,8 +4,7 @@ import { tv } from 'tailwind-variants';
 import { Row, RowProps } from 'react-aria-components';
 
 export const dataTableRow = tv({
-  // add the component styles
-  base: '',
+  base: 'not-last:border-b border-gray-200 hover:bg-gray-100',
 });
 
 export type DataTableRowProps<T extends object> = VariantProps<

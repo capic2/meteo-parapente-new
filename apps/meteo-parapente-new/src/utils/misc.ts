@@ -10,6 +10,18 @@ export function formatDateYYYYMMDD(date: Date): string {
   return `${year}${month}${day}`;
 }
 
+export function formatedDateToDate(date: string | undefined): Date {
+  if (!date) {
+    return new Date();
+  }
+
+  return new Date(
+    Number(date.substring(0, 4)),
+    Number(date.substring(4, 6)) - 1,
+    Number(date.substring(6, 8))
+  );
+}
+
 export function isPropertyWithSubProperties(
   data: MeteoType['data'][number]
 ): data is MeteoPropertyWithSubPropertiesType {

@@ -34,7 +34,7 @@ export async function designSystemComponentGenerator(
 
   const projectConfiguration = readProjectConfiguration(
     tree,
-    'design-system'
+    '@meteo-parapente-new/design-system'
   );
 
   if (componentPartOf) {

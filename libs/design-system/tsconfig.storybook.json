@@ -4,6 +4,7 @@
     "outDir": "out-tsc/storybook",
     "module": "esnext",
     "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "jsx": "preserve"
   },
   "exclude": [
@@ -23,7 +24,9 @@
     "src/**/*.stories.tsx",
     "src/**/*.stories.mdx",
     ".storybook/*.js",
-    ".storybook/*.ts"
+    ".storybook/*.ts",
+    ".storybook/*.tsx",
+    "i18n/**/*.json"
   ],
   "references": [
     {

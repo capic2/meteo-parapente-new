@@ -8,7 +8,7 @@ export function registerComponent(tree: Tree, componentPath: string) {
   const exportStatement = `export * from './${componentPath}'`
   const designSystemConfig = readProjectConfiguration(
     tree,
-    'design-system'
+    '@meteo-parapente-new/design-system'
   )
 
   if (!designSystemConfig.sourceRoot) {

@@ -6,3 +6,9 @@ export * from './components/data-table/parts/DataTableHeader';
 export * from './components/data-table/parts/DataTableRow';
 export * from './components/data-table/parts/DataTableRowHeader';
 export * from './components/tooltip/Tooltip';
+
+export * from './components/pagination/Pagination';
+
+export * from './components/pagination/parts/PaginationNavButton';
+
+export * from './components/pagination/parts/PaginationLink';

@@ -39,21 +39,19 @@ const MeteoDataTable = ({ meteoResponse }: MeteoDataTableProps) => {
               <DataTableRowHeader>
                 {isPropertyWithSubProperties(meteoResponse.data[property]) ? (
                   <div className="grid grid-cols-2 gap-x-2">
-                    <span className="self-center">
+                    <span className="self-center row-span-3">
                       <FormattedMessage
                         id={meteoResponse.data[property].label}
                       />
                     </span>
 
-                    <div className="grid grid-rows-3">
-                      {Object.values(
-                        meteoResponse.data[property].properties
-                      ).map((subProperty) => (
+                    {Object.values(meteoResponse.data[property].properties).map(
+                      (subProperty) => (
                         <span>
                           <FormattedMessage id={subProperty.label} />
                         </span>
-                      ))}
-                    </div>
+                      )
+                    )}
                   </div>
                 ) : (
                   <FormattedMessage id={meteoResponse.data[property].label} />

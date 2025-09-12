@@ -53,31 +53,35 @@ const renderValue = ({
   range: string;
 }) => {
   return (
-    <div className="grid grid-cols-2 gap-x-2">
-      {renderProviderValue({
-        label,
-        range,
-        valuesByProvider,
-        provider: 'meteoBlue',
-      })}
-      {renderProviderValue({
-        label,
-        range,
-        valuesByProvider,
-        provider: 'meteoParapente',
-      })}
-    </div>
+    <>
+      <div>
+        {renderProviderValue({
+          label,
+          range,
+          valuesByProvider,
+          provider: 'meteoBlue',
+        })}
+      </div>
+      <div>
+        {renderProviderValue({
+          label,
+          range,
+          valuesByProvider,
+          provider: 'meteoParapente',
+        })}
+      </div>
+    </>
   );
 };
 
 const MeteoDataTableCell = ({ data, range }: MeteoDataTableCellProps) => {
   return (
     <DataTableCell>
-      <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-2">
         {isPropertyWithSubProperties(data) ? (
           <>
             {Object.entries(data.properties).map(([key, value]) => {
-              const propertyName = key as keyof (typeof data)['properties'];
+              const propertyName = key as keyof typeof data['properties'];
               return renderValue({
                 label: data.properties[propertyName].label,
                 valuesByProvider: value,

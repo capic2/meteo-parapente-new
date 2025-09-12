@@ -10,7 +10,7 @@ import { Pagination } from '@meteo-parapente-new/design-system';
 
 const meteoOptions = (startDate: string | undefined) =>
   queryOptions({
-    queryKey: ['meteo'],
+    queryKey: ['meteo', startDate],
     queryFn: async () => {
       if (!startDate) {
         throw new Error('startDate is required');

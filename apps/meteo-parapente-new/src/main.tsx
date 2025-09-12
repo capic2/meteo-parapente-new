@@ -31,7 +31,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-if (!import.meta.env.API_URL) {
+if (!import.meta.env.VITE_API_URL) {
   alert(
     'The API_URL environment variable is not set. Please set it to the URL of your API.'
   );

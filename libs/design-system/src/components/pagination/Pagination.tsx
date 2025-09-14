@@ -74,7 +74,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
     const [currentPageIndex, setCurrentPageIndex] = useState<number>(
       pagesList.findIndex((page) => page === currentPage) ?? 0
     );
-    console.log(currentPageIndex);
+
     const { base, pagesList: pageListClass } = pagination();
 
     const goToPage = (direction: 'previous' | 'next') => {

@@ -6,6 +6,7 @@ import { DataTableCell, Tooltip } from '@meteo-parapente-new/design-system';
 
 import { FormattedMessage } from 'react-intl';
 import { isPropertyWithSubProperties } from '../../../utils/misc';
+import { Fragment } from 'react';
 
 interface MeteoDataTableCellProps {
   data: MeteoType['data'][number];
@@ -28,17 +29,18 @@ const renderProviderValue = ({
       <Tooltip content={<FormattedMessage id={label} />}>
         {Array.isArray(valuesByProvider.ranges?.[range][provider]) ? (
           <div className="flex flex-row gap-2">
-            {valuesByProvider.ranges?.[range][provider].map((value) => (
-              <span key={value}>{value}</span>
+            {valuesByProvider.ranges?.[range][provider].map((value, index) => (
+              <span key={`${value}${index}`}>{value}</span>
             ))}
           </div>
         ) : (
           <span>{valuesByProvider.ranges?.[range][provider]}</span>
         )}
       </Tooltip>
-      {valuesByProvider.unit && (
-        <span className="text-xs self-center">{valuesByProvider.unit}</span>
-      )}
+      {valuesByProvider.unit &&
+        valuesByProvider.ranges?.[range][provider] !== '_' && (
+          <span className="text-xs self-center">{valuesByProvider.unit}</span>
+        )}
     </div>
   );
 };
@@ -53,7 +55,7 @@ const renderValue = ({
   range: string;
 }) => {
   return (
-    <>
+    <Fragment key={label}>
       <div>
         {renderProviderValue({
           label,
@@ -70,7 +72,7 @@ const renderValue = ({
           provider: 'meteoParapente',
         })}
       </div>
-    </>
+    </Fragment>
   );
 };
 

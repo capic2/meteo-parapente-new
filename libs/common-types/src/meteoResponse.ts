@@ -9,13 +9,15 @@ const meteoData = z
 const meteoProperty = z.object({
   label: z.string(),
   unit: z.string().optional(),
-  ranges: z.record(
-    z.string().regex(/[0-9]{2}-[0-9]{2}/),
-    z.object({
-      meteoBlue: meteoData,
-      meteoParapente: meteoData.optional(),
-    })
-  ).optional(),
+  ranges: z
+    .record(
+      z.string().regex(/[0-9]{2}-[0-9]{2}/),
+      z.object({
+        meteoBlue: meteoData.optional(),
+        meteoParapente: meteoData.optional(),
+      })
+    )
+    .optional(),
 });
 
 const propertyWithSubPropertiesSchema = z.object({

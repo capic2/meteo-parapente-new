@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import fr from '../i18n/fr-FR.json';
-
+import dsFr from '@meteo-parapente-new/design-system/i18n/fr-FR.json';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
@@ -40,7 +40,7 @@ if (!import.meta.env.VITE_API_URL) {
 root.render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <IntlProvider locale="fr-FR" messages={fr}>
+      <IntlProvider locale="fr-FR" messages={{ ...fr, ...dsFr }}>
         <RouterProvider router={router} />
       </IntlProvider>
     </QueryClientProvider>

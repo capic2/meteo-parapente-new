@@ -5,7 +5,7 @@ import type { Tree } from '@nx/devkit'
 import { readProjectConfiguration } from '@nx/devkit'
 
 export function registerComponent(tree: Tree, componentPath: string) {
-  const exportStatement = `export * from './${componentPath}'`
+  const exportStatement = `export * from './components/${componentPath}'`
   const designSystemConfig = readProjectConfiguration(
     tree,
     '@meteo-parapente-new/design-system'

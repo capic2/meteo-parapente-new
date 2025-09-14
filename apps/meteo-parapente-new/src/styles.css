@@ -1,9 +1,11 @@
 @import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
+@import 'leaflet-geosearch/assets/css/leaflet.css';
 
 @source "../../../libs/design-system/src";
 
 /*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  The default border color has changed to `current//color` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
   looks the same as it did with Tailwind CSS v3.
 

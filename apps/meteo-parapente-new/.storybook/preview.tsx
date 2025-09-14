@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import meteoJsonMock from '../mocks/meteo.json' with { type: 'json' };
 import '../src/styles.css';
 import { IntlProvider } from 'react-intl';
+import dsFr from '@meteo-parapente-new/design-system/i18n/fr-FR.json';
 import fr from '../i18n/fr-FR.json';
 import {
   createMemoryHistory,
@@ -82,7 +83,7 @@ const preview: Preview = {
     (Story) => {
       return (
         <QueryClientProvider client={queryClient}>
-          <IntlProvider locale="fr-FR" messages={fr}>
+          <IntlProvider locale="fr-FR" messages={{...fr, ...dsFr}}>
             <Story />
           </IntlProvider>
         </QueryClientProvider>

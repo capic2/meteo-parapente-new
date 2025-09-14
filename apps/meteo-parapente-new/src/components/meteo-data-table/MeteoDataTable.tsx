@@ -17,11 +17,11 @@ interface MeteoDataTableProps {
 
 const MeteoDataTable = ({ meteoResponse }: MeteoDataTableProps) => {
   return (
-    <DataTable>
+    <DataTable aria-label="MeteoDataTable">
       <DataTableHeader>
-        <DataTableColumn />
+        <DataTableColumn isRowHeader={true} />
         {meteoResponse.structure.hourRanges.map((hourRange) => (
-          <DataTableColumn>
+          <DataTableColumn key={hourRange} isRowHeader={true}>
             <div className="flex flex-col items-center">
               <span>{hourRange}</span>
               <div className="flex justify-between w-full">
@@ -33,9 +33,9 @@ const MeteoDataTable = ({ meteoResponse }: MeteoDataTableProps) => {
         ))}
       </DataTableHeader>
       <DataTableBody>
-        {meteoResponse.structure.properties.map((property) => {
+        {meteoResponse.structure.properties.map((property, index) => {
           return (
-            <DataTableRow key={property}>
+            <DataTableRow key={`${property}-${index}`}>
               <DataTableRowHeader>
                 {isPropertyWithSubProperties(meteoResponse.data[property]) ? (
                   <div className="grid grid-cols-2 gap-x-2">
@@ -46,8 +46,8 @@ const MeteoDataTable = ({ meteoResponse }: MeteoDataTableProps) => {
                     </span>
 
                     {Object.values(meteoResponse.data[property].properties).map(
-                      (subProperty) => (
-                        <span>
+                      (subProperty, index) => (
+                        <span key={`${subProperty.label}-${index}`}>
                           <FormattedMessage id={subProperty.label} />
                         </span>
                       )

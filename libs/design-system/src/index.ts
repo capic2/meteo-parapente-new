@@ -9,3 +9,5 @@ export * from './components/pagination/Pagination';
 export * from './components/pagination/parts/PaginationLink';
 export * from './components/pagination/parts/PaginationNavButton';
 export * from './components/tooltip/Tooltip';
+
+export * from './components/maps/Maps';

@@ -11,10 +11,10 @@ export const dataTable = tv({
 
 export type DataTableProps = VariantProps<typeof dataTable> & TableProps;
 
-const DataTable = ({ children }: DataTableProps) => {
+const DataTable = ({ children, ...rest }: DataTableProps) => {
   return (
     <ResizableTableContainer>
-      <Table className={dataTable()}>
+      <Table className={dataTable()} {...rest}>
         {children}
       </Table>
     </ResizableTableContainer>

@@ -6,20 +6,20 @@ import { MeteoDataTable } from '../components/meteo-data-table/MeteoDataTable';
 import ky from 'ky';
 import { z } from 'zod';
 import { formatDateYYYYMMDD, formatedDateToDate } from '../utils/misc';
-import { Pagination } from '@meteo-parapente-new/design-system';
+import {
+  Coordinates,
+  Maps,
+  Pagination,
+} from '@meteo-parapente-new/design-system';
 
-const meteoOptions = (startDate: string | undefined) =>
+const meteoOptions = (startDate: string, lat: number, lon: number) =>
   queryOptions({
-    queryKey: ['meteo', startDate],
+    queryKey: ['meteo', startDate, lat, lon],
     queryFn: async () => {
-      if (!startDate) {
-        throw new Error('startDate is required');
-      }
-
       const response = await ky.get(
         `${
           import.meta.env.VITE_API_URL
-        }/meteo?startDate=${startDate}&lat=46.971161&lon=5.885981`
+        }/meteo?startDate=${startDate}&lat=${lat}&lon=${lon}`
       );
       const json = await response.json();
 
@@ -29,9 +29,15 @@ const meteoOptions = (startDate: string | undefined) =>
   });
 
 export const Route = createFileRoute('/')({
-  loaderDeps: ({ search: { startDate } }) => ({ startDate }),
+  loaderDeps: ({ search: { startDate, lat, lon } }) => ({
+    startDate,
+    lat,
+    lon,
+  }),
   loader: ({ context, deps }) =>
-    context.queryClient.ensureQueryData(meteoOptions(deps.startDate)),
+    context.queryClient.ensureQueryData(
+      meteoOptions(deps.startDate, deps.lat, deps.lon)
+    ),
   component: Index,
   validateSearch: z.object({
     startDate: z
@@ -39,12 +45,14 @@ export const Route = createFileRoute('/')({
       .regex(/^\d{4}\d{2}\d{2}$/)
       .optional()
       .default(formatDateYYYYMMDD(new Date())),
+    lat: z.number().optional().default(46.971161),
+    lon: z.number().optional().default(5.885981),
   }),
 });
 
 export function Index() {
-  const startDate = Route.useSearch().startDate;
-  const { data } = useSuspenseQuery(meteoOptions(startDate));
+  const { startDate, lat, lon } = Route.useSearch();
+  const { data } = useSuspenseQuery(meteoOptions(startDate, lat, lon));
   const navigate = useNavigate();
 
   if (!data) {
@@ -71,8 +79,19 @@ export function Index() {
     formatDateYYYYMMDD(new Date(new Date().setDate(new Date().getDate() + i)))
   );
 
+  const onCoordinatesChange = ({ lat, lon }: Coordinates) => {
+    void navigate({
+      to: '/',
+      search: {
+        startDate,
+        lat,
+        lon,
+      },
+    });
+  };
+
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-10">
       <h1 className="text-2xl">
         <Pagination
           currentPage={startDate}
@@ -83,21 +102,37 @@ export function Index() {
           )}
           onNextPress={() =>
             navigate({
-              to: `/?startDate="${listDates.at(
-                listDates.findIndex((date) => date === startDate) + 1
-              )}"`,
+              to: '/',
+              search: {
+                startDate: listDates.at(
+                  listDates.findIndex((date) => date === startDate) + 1
+                ),
+                lat,
+                lon,
+              },
             })
           }
           onPreviousPress={() =>
             navigate({
-              to: `/?startDate="${listDates.at(
-                listDates.findIndex((date) => date === startDate) - 1
-              )}"`,
+              to: '/',
+              search: {
+                startDate: listDates.at(
+                  listDates.findIndex((date) => date === startDate) - 1
+                ),
+                lat,
+                lon,
+              },
             })
           }
         />
       </h1>
       <MeteoDataTable meteoResponse={data.data} />
+      <Maps
+        className="h-[500px]"
+        latitude={46.971161}
+        longitude={5.885981}
+        onCoordinatesChange={onCoordinatesChange}
+      />
     </div>
   );
 }

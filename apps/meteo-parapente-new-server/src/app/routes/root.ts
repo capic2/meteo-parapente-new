@@ -10,6 +10,7 @@ import { allSettledWithIds } from '../utils/promise';
 import { MeteoStandardProviderStructure } from '../../types';
 
 type BaseProperty = {
+  id: string;
   label: string;
   type: 'number' | 'string';
   unit?: string;
@@ -17,24 +18,25 @@ type BaseProperty = {
 };
 
 type ObjectProperty = {
+  id: string;
   label: string;
   type: 'object';
-  properties: Record<string, BaseProperty>;
+  properties: Array<BaseProperty>;
 };
 
-type PropertyDefinition = Record<string, BaseProperty | ObjectProperty>;
+type PropertyDefinitions = Array<BaseProperty | ObjectProperty>;
 
 const handleProperty = ({
   provider,
-  key,
-  propertyKey,
+  propertyId,
+                          subPropertyId,
   hourRange,
   type,
   format,
 }: {
   provider: MeteoStandardProviderStructure | null | undefined;
-  key: string;
-  propertyKey?: string;
+  propertyId: string;
+  subPropertyId?: string;
   hourRange: string;
   type: 'number' | 'string';
   format?: Intl.NumberFormatOptions;
@@ -43,12 +45,14 @@ const handleProperty = ({
     return '_';
   }
 
-  const value = propertyKey
-    ? provider[key] &&
-      provider[key][propertyKey] &&
+  const value = subPropertyId
+    ? provider[propertyId] &&
+      provider[propertyId][subPropertyId] &&
       // @ts-expect-error to fix
-      provider[key][propertyKey][hourRange]
-    : provider[key] && provider[key] && provider[key][hourRange];
+      provider[propertyId][subPropertyId][hourRange]
+    : provider[propertyId] &&
+      provider[propertyId] &&
+      provider[propertyId][hourRange];
 
   if (!value) {
     return '_';
@@ -61,7 +65,7 @@ const handleProperty = ({
   return new Intl.NumberFormat('fr-Fr', format).format(value);
 };
 
-const propertyDefinitions = [
+const propertyDefinitions: PropertyDefinitions = [
   {
     id: 'wind',
     label: 'app.meteo.wind',
@@ -119,7 +123,7 @@ export default async function (fastify: FastifyInstance) {
     async function () {
       const structure: StructureMeteoResponseType = {
         hourRanges: ['09-12', '12-16', '16-19'],
-        properties:  [
+        properties: [
           {
             id: 'wind',
             label: 'app.meteo.wind',
@@ -158,12 +162,14 @@ export default async function (fastify: FastifyInstance) {
   );
 
   fastify.get<{
-    Body: StructureMeteoQueryType;
-    Querystring: { lat: number; lon: number; startDate: string };
+    Querystring: {
+      lat: number;
+      lon: number;
+      startDate: string;
+    } & StructureMeteoQueryType;
     Reply: MeteoType | null | string;
   }>('/meteo', async function (request) {
-    const { lat, lon, startDate } = request.query;
-    const { hourRanges, propertyIds } = request.body;
+    const { lat, lon, startDate, propertyIds, hourRanges } = request.query;
 
     const date = new Date(
       new Date(
@@ -199,22 +205,27 @@ export default async function (fastify: FastifyInstance) {
       (result) => result.id === 'meteoParapente'
     )?.value;
 
-    const data: MeteoType['data'] = {};
+    const meteoResponse: MeteoType = {};
 
-    for (const [key, property] of Object.entries(properties)) {
-      const dataProperty: MeteoType['data'][keyof MeteoType['data']] = {
-        label: property.label,
+    for (const propertyId of propertyIds) {
+      const property = propertyDefinitions.find(
+        (property) => property.id === propertyId
+      );
+      if (!property) {
+        continue;
+      }
+
+      meteoResponse[propertyId] = {
         ...('unit' in property && { unit: property.unit }),
         ...(property.type === 'object'
           ? {
               properties: Object.fromEntries(
-                Object.entries(property.properties).map(
-                  ([propertyKey, propertyValue]) => [
-                    propertyKey,
+                property.properties.map(
+                  (subProperty) => [
+                    subProperty.id,
                     {
-                      label: propertyValue.label,
-                      ...('unit' in propertyValue && {
-                        unit: propertyValue.unit,
+                      ...('unit' in subProperty && {
+                        unit: subProperty.unit,
                       }),
                       ranges: Object.fromEntries(
                         hourRanges.map((hourRange) => [
@@ -222,19 +233,19 @@ export default async function (fastify: FastifyInstance) {
                           {
                             meteoBlue: handleProperty({
                               provider: meteoBlueData,
-                              key,
-                              propertyKey,
+                              propertyId,
+                              subPropertyId: subProperty.id,
                               hourRange,
-                              type: propertyValue.type,
-                              format: propertyValue.format,
+                              type: subProperty.type,
+                              format: subProperty.format,
                             }),
                             meteoParapente: handleProperty({
                               provider: meteoParapenteData,
-                              key,
-                              propertyKey,
+                              propertyId,
+                              subPropertyId: subProperty.id,
                               hourRange,
-                              type: propertyValue.type,
-                              format: propertyValue.format,
+                              type: subProperty.type,
+                              format: subProperty.format,
                             }),
                           },
                         ])
@@ -251,14 +262,14 @@ export default async function (fastify: FastifyInstance) {
                   {
                     meteoBlue: handleProperty({
                       provider: meteoBlueData,
-                      key,
+                      propertyId,
                       hourRange,
                       type: property.type,
                       format: property.format,
                     }),
                     meteoParapente: handleProperty({
                       provider: meteoParapenteData,
-                      key,
+                      propertyId,
                       hourRange,
                       type: property.type,
                       format: property.format,
@@ -268,11 +279,7 @@ export default async function (fastify: FastifyInstance) {
               ),
             }),
       };
-      data[key] = dataProperty;
     }
-    const meteoResponse: MeteoType = {
-      data,
-    };
 
     return meteoResponse;
   });

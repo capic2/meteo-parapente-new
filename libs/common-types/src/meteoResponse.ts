@@ -31,7 +31,6 @@ const meteoData = z
   .or(z.array(z.number()));
 
 const meteoProperty = z.object({
-  label: z.string(),
   unit: z.string().optional(),
   ranges: z
     .record(
@@ -45,7 +44,6 @@ const meteoProperty = z.object({
 });
 
 const propertyWithSubPropertiesSchema = z.object({
-  label: z.string(),
   unit: z.string().optional(),
   properties: z.record(z.string(), meteoProperty),
 });

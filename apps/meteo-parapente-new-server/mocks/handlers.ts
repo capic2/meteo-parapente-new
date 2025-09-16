@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw';
 import meteoParapenteJson from './meteoparapente.json' with { type: 'json' };
 import meteoBlueJson from './meteoblue.json' with { type: 'json' };
 import meteoBlueWindJson from './meteoblue_wind.json' with { type: 'json' };
+import meteoParapenteInitValue from './meteoparapente_init.json' with { type: 'json' };
 
 export const handlers = [
   http.get('https://my.meteoblue.com/packages/basic-1h_basic-day', () => {
@@ -9,6 +10,9 @@ export const handlers = [
   }),
   http.get('https://my.meteoblue.com/packages/wind-1h', () => {
     return HttpResponse.json(meteoBlueWindJson);
+  }),
+  http.get('https://data0.meteo-parapente.com/status.php', async () => {
+    return HttpResponse.json(meteoParapenteInitValue);
   }),
   http.get('https://data0.meteo-parapente.com/data.php', () => {
     return HttpResponse.json(meteoParapenteJson);

@@ -1,6 +1,6 @@
 import {
   MeteoType,
-  StructureMeteoType,
+  StructureMeteoResponseType,
 } from '@meteo-parapente-new/common-types';
 import { app } from './app/app';
 import Fastify from 'fastify';
@@ -36,7 +36,7 @@ describe('main', () => {
         url: '/structure',
       });
 
-      const expected: StructureMeteoType = {
+      const expected: StructureMeteoResponseType = {
         hourRanges: ['09-12', '12-16', '16-19'],
         properties: [
           {
@@ -78,9 +78,14 @@ describe('main', () => {
 
   describe('/meteo', () => {
     it('returns 200', async () => {
-      const response = await server.inject(
-        '/meteo?startDate=20250819&lat=46.971161&lon=5.885981'
-      );
+      const response = await server.inject({
+        method: 'GET',
+        url: '/meteo?startDate=20250819&lat=46.971161&lon=5.885981',
+        body: {
+          hourRanges: ['09-12', '12-16', '16-19'],
+          propertyIds: ['wind', 'rain', 'clouds', 'temperature'],
+        },
+      });
 
       expect(response.statusCode).toBe(200);
     });
@@ -88,126 +93,174 @@ describe('main', () => {
     it('returns data', async () => {
       const response = server.inject({
         method: 'GET',
-        url: '/meteo?startDate=20250819&lat=46.971161&lon=5.885981',
+        url: '/meteo',
+        query: {
+          startDate: '20250819',
+          lat: '46.971161',
+          lon: '5.885981',
+          propertyIds: ['wind', 'rain', 'clouds', 'temperature'],
+          hourRanges: ['09-12', '12-16', '16-19'],
+        },
       });
 
+      /*const expcted = [
+        {
+          id: 'clouds',
+          ranges: [
+            { id: '09-12', meteoBlue: 0, meteoParapente: 0 },
+            { id: '12-16', meteoBlue: 0, meteoParapente: 0 },
+            { id: '16-19', meteoBlue: 0, meteoParapente: 0 },
+          ],
+        },
+        {
+          id: 'rain',
+          ranges: [
+            { id: '09-12', meteoBlue: 0, meteoParapente: 0 },
+            { id: '12-16', meteoBlue: 0, meteoParapente: 0 },
+            { id: '16-19', meteoBlue: 0, meteoParapente: 0 },
+          ],
+        },
+        {
+          id: 'temperature',
+          ranges: [
+            { id: '09-12', meteoBlue: 0, meteoParapente: 0 },
+            { id: '12-16', meteoBlue: 0, meteoParapente: 0 },
+            { id: '16-19', meteoBlue: 0, meteoParapente: 0 },
+          ],
+        },
+        {
+          id: 'wind',
+          property: 'direction',
+          ranges: [
+            { id: '09-12', meteoBlue: 'E', meteoParapente: 'E' },
+            { id: '12-16', meteoBlue: 'E', meteoParapente: 'E' },
+            { id: '16-19', meteoBlue: 'E', meteoParapente: 'E' },
+          ],
+        },
+        {
+          id: 'wind',
+          property: 'speed',
+          ranges: [
+            { id: '09-12', meteoBlue: 2.69, meteoParapente: 2.69 },
+            { id: '12-16', meteoBlue: 2.69, meteoParapente: 2.69 },
+            { id: '16-19', meteoBlue: 2.69, meteoParapente: 2.69 },
+          ],
+        },
+        {
+          id: 'wind',
+          property: 'gust',
+          ranges: [
+            { id: '09-12', meteoBlue: 2.69, meteoParapente: 2.69 },
+            { id: '12-16', meteoBlue: 2.69, meteoParapente: 2.69 },
+            { id: '16-19', meteoBlue: 2.69, meteoParapente: 2.69 },
+          ],
+        },
+      ];*/
+
       const expected: MeteoType = {
-        data: {
-          clouds: {
-            label: 'app.meteo.clouds',
-            ranges: {
-              '09-12': {
-                meteoBlue: '_',
-                meteoParapente: '_',
-              },
-              '12-16': {
-                meteoBlue: '_',
-                meteoParapente: '_',
-              },
-              '16-19': {
-                meteoBlue: '_',
-                meteoParapente: '_',
-              },
+        clouds: {
+          ranges: {
+            '09-12': {
+              meteoBlue: '_',
+              meteoParapente: '_',
             },
-          },
-          rain: {
-            label: 'app.meteo.rain',
-            ranges: {
-              '09-12': {
-                meteoBlue: '_',
-                meteoParapente: 0.3,
-              },
-              '12-16': {
-                meteoBlue: 0.16,
-                meteoParapente: 0.2,
-              },
-              '16-19': {
-                meteoBlue: 1.53,
-                meteoParapente: 4.1,
-              },
+            '12-16': {
+              meteoBlue: '_',
+              meteoParapente: '_',
             },
-            unit: 'mm',
-          },
-          temperature: {
-            label: 'app.meteo.temperature',
-            ranges: {
-              '09-12': {
-                meteoBlue: '_',
-                meteoParapente: '_',
-              },
-              '12-16': {
-                meteoBlue: '_',
-                meteoParapente: '_',
-              },
-              '16-19': {
-                meteoBlue: '_',
-                meteoParapente: '_',
-              },
-            },
-            unit: '°C',
-          },
-          wind: {
-            label: 'app.meteo.wind',
-            properties: {
-              direction: {
-                label: 'app.meteo.meteo-blue.wind.direction',
-                ranges: {
-                  '09-12': {
-                    meteoBlue: ['S', 'W', 'W', 'SW'],
-                    meteoParapente: ['E', 'NE', 'N', 'NE'],
-                  },
-                  '12-16': {
-                    meteoBlue: ['SW', 'W', 'W', 'SW', 'SW'],
-                    meteoParapente: ['NE', 'NE', 'NE', 'N', 'SW'],
-                  },
-                  '16-19': {
-                    meteoBlue: ['SW', 'SW', 'SW', 'SW'],
-                    meteoParapente: ['SW', 'SW', 'W', 'SW'],
-                  },
-                },
-              },
-              gust: {
-                label: 'app.meteo.meteo-blue.wind.gust',
-                ranges: {
-                  '09-12': {
-                    meteoBlue: '19,8',
-                    meteoParapente: '_',
-                  },
-                  '12-16': {
-                    meteoBlue: '35,89',
-                    meteoParapente: '_',
-                  },
-                  '16-19': {
-                    meteoBlue: '35,89',
-                    meteoParapente: '_',
-                  },
-                },
-                unit: 'km/h',
-              },
-              speed: {
-                label: 'app.meteo.meteo-blue.wind.speed',
-                ranges: {
-                  '09-12': {
-                    meteoBlue: '2,69',
-                    meteoParapente: '10,63',
-                  },
-                  '12-16': {
-                    meteoBlue: '5,22',
-                    meteoParapente: '10,63',
-                  },
-                  '16-19': {
-                    meteoBlue: '5,22',
-                    meteoParapente: '20,97',
-                  },
-                },
-                unit: 'km/h',
-              },
+            '16-19': {
+              meteoBlue: '_',
+              meteoParapente: '_',
             },
           },
         },
-        structure: {
-          hourRanges: ['09-12', '12-16', '16-19'],
-          properties: ['wind', 'rain', 'clouds', 'temperature'],
+        rain: {
+          ranges: {
+            '09-12': {
+              meteoBlue: '_',
+              meteoParapente: 0.3,
+            },
+            '12-16': {
+              meteoBlue: 0.16,
+              meteoParapente: 0.2,
+            },
+            '16-19': {
+              meteoBlue: 1.53,
+              meteoParapente: 4.1,
+            },
+          },
+          unit: 'mm',
+        },
+        temperature: {
+          ranges: {
+            '09-12': {
+              meteoBlue: '_',
+              meteoParapente: '_',
+            },
+            '12-16': {
+              meteoBlue: '_',
+              meteoParapente: '_',
+            },
+            '16-19': {
+              meteoBlue: '_',
+              meteoParapente: '_',
+            },
+          },
+          unit: '°C',
+        },
+        wind: {
+          properties: {
+            direction: {
+              ranges: {
+                '09-12': {
+                  meteoBlue: ['S', 'W', 'W', 'SW'],
+                  meteoParapente: ['E', 'NE', 'N', 'NE'],
+                },
+                '12-16': {
+                  meteoBlue: ['SW', 'W', 'W', 'SW', 'SW'],
+                  meteoParapente: ['NE', 'NE', 'NE', 'N', 'SW'],
+                },
+                '16-19': {
+                  meteoBlue: ['SW', 'SW', 'SW', 'SW'],
+                  meteoParapente: ['SW', 'SW', 'W', 'SW'],
+                },
+              },
+            },
+            gust: {
+              ranges: {
+                '09-12': {
+                  meteoBlue: '19,8',
+                  meteoParapente: '_',
+                },
+                '12-16': {
+                  meteoBlue: '35,89',
+                  meteoParapente: '_',
+                },
+                '16-19': {
+                  meteoBlue: '35,89',
+                  meteoParapente: '_',
+                },
+              },
+              unit: 'km/h',
+            },
+            speed: {
+              ranges: {
+                '09-12': {
+                  meteoBlue: '2,69',
+                  meteoParapente: '10,63',
+                },
+                '12-16': {
+                  meteoBlue: '5,22',
+                  meteoParapente: '10,63',
+                },
+                '16-19': {
+                  meteoBlue: '5,22',
+                  meteoParapente: '20,97',
+                },
+              },
+              unit: 'km/h',
+            },
+          },
         },
       };
 

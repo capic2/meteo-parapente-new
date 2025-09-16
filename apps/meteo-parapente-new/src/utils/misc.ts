@@ -23,7 +23,12 @@ export function formatedDateToDate(date: string | undefined): Date {
 }
 
 export function isPropertyWithSubProperties(
-  data: MeteoType['data'][number]
+  data: MeteoType['data'][number] | undefined
 ): data is MeteoPropertyWithSubPropertiesType {
-  return 'properties' in data;
+  return data !== undefined && 'properties' in data;
+}
+
+export function meteoDataToRow(data: MeteoType['data']) {
+
+  return data;
 }

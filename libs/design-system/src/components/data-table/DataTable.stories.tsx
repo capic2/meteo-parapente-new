@@ -54,3 +54,22 @@ export const Primary: Story = {
     </DataTable>
   ),
 };
+
+export const Loading: Story = {
+  args: {
+    isLoading: true,
+  },
+  render: (args) => (
+    <DataTable {...args}>
+      <DataTableHeader>
+        <DataTableColumn />
+        <DataTableColumn>09h - 12h</DataTableColumn>
+        <DataTableColumn>12h - 16h</DataTableColumn>
+        <DataTableColumn>16h - 19h</DataTableColumn>
+      </DataTableHeader>
+      <DataTableBody>
+
+      </DataTableBody>
+    </DataTable>
+  ),
+};

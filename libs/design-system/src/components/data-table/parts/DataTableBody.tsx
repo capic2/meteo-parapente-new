@@ -3,6 +3,9 @@ import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
 import { TableBody, TableBodyProps } from 'react-aria-components';
 import { DataTableRowProps } from './DataTableRow';
+import { useDataTableContext } from '../DataTable.context';
+import { DataTableBodyLoading } from './DataTableBodyLoading';
+import { DataTableBodyNoData } from './DataTableBodyNoData';
 
 export const dataTableBody = tv({
   // add the component styles
@@ -18,8 +21,18 @@ const DataTableBodyInternal = <T extends object>(
   { children, ...rest }: DataTableBodyProps<T>,
   ref: ForwardedRef<HTMLDivElement>
 ) => {
+  const { isLoading,items } = useDataTableContext();
+  console.log({ isLoading });
   return (
-    <TableBody ref={ref} className={dataTableBody()} {...rest}>
+    <TableBody
+      ref={ref}
+      items={items}
+      className={dataTableBody()}
+      renderEmptyState={() =>
+        isLoading ? <DataTableBodyLoading /> : <DataTableBodyNoData />
+      }
+      {...rest}
+    >
       {children}
     </TableBody>
   );

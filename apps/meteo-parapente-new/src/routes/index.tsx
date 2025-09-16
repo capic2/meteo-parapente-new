@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { meteoSchema } from '@meteo-parapente-new/common-types';
 import { FormattedDate } from 'react-intl';
 import { MeteoDataTable } from '../components/meteo-data-table/MeteoDataTable';
@@ -52,18 +52,10 @@ export const Route = createFileRoute('/')({
 
 export function Index() {
   const { startDate, lat, lon } = Route.useSearch();
-  const { data } = useSuspenseQuery(meteoOptions(startDate, lat, lon));
+  const { data, isFetching } = useQuery(meteoOptions(startDate, lat, lon));
   const navigate = useNavigate();
 
-  if (!data) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        Bad response
-      </div>
-    );
-  }
-
-  if (data.error) {
+  if (!isFetching && data?.error) {
     return (
       <div className="flex h-screen items-center justify-center">
         {data.error.message}
@@ -71,7 +63,7 @@ export function Index() {
     );
   }
 
-  if (!data.data) {
+  if (!isFetching && !data?.data) {
     return <div>No data</div>;
   }
 
@@ -126,11 +118,11 @@ export function Index() {
           }
         />
       </h1>
-      <MeteoDataTable meteoResponse={data.data} />
+      <MeteoDataTable meteoResponse={data?.data} isLoading={isFetching} />
       <Maps
         className="h-[500px]"
-        latitude={46.971161}
-        longitude={5.885981}
+        latitude={lat}
+        longitude={lon}
         onCoordinatesChange={onCoordinatesChange}
       />
     </div>

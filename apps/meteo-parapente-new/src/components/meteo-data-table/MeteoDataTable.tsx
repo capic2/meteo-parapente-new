@@ -12,25 +12,35 @@ import { MeteoType } from '@meteo-parapente-new/common-types';
 import { isPropertyWithSubProperties } from '../../utils/misc';
 
 interface MeteoDataTableProps {
-  meteoResponse: MeteoType;
+  meteoResponse: MeteoType | undefined;
+  isLoading?: boolean;
 }
 
-const MeteoDataTable = ({ meteoResponse }: MeteoDataTableProps) => {
+const MeteoDataTable = ({ meteoResponse, isLoading }: MeteoDataTableProps) => {
+
   return (
-    <DataTable aria-label="MeteoDataTable">
-      <DataTableHeader>
-        <DataTableColumn isRowHeader={true} />
-        {meteoResponse.structure.hourRanges.map((hourRange) => (
-          <DataTableColumn key={hourRange} isRowHeader={true}>
+    <DataTable aria-label="MeteoDataTable" isLoading={isLoading}>
+      <DataTableHeader
+        columns={[
+          { id: 'row', name: '', isRowHeader: false },
+          ...meteoResponse.structure.hourRanges.map((hourRange) => ({
+            id: hourRange,
+            name: hourRange,
+            isRowHeader: false,
+          })),
+        ]}
+      >
+        {(column) => (
+          <DataTableColumn isRowHeader={column.isRowHeader}>
             <div className="flex flex-col items-center">
-              <span>{hourRange}</span>
+              <span>{column.name}</span>
               <div className="flex justify-between w-full">
                 <span className="w-full text-center">MeteoBlue</span>
                 <span className="w-full text-center">MeteoParapente</span>
               </div>
             </div>
           </DataTableColumn>
-        ))}
+        )}
       </DataTableHeader>
       <DataTableBody>
         {meteoResponse.structure.properties.map((property, index) => {

@@ -1,6 +1,10 @@
 import { FastifyInstance } from 'fastify';
 import { getMeteoBlueData } from '../meteo/meteoBlue';
-import { MeteoType } from '@meteo-parapente-new/common-types';
+import {
+  MeteoType,
+  StructureMeteoQueryType,
+  StructureMeteoResponseType,
+} from '@meteo-parapente-new/common-types';
 import { getMeteoParapenteData } from '../meteo/meteoParapente';
 import { allSettledWithIds } from '../utils/promise';
 import { MeteoStandardProviderStructure } from '../../types';
@@ -57,59 +61,110 @@ const handleProperty = ({
   return new Intl.NumberFormat('fr-Fr', format).format(value);
 };
 
+const propertyDefinitions = [
+  {
+    id: 'wind',
+    label: 'app.meteo.wind',
+    type: 'object',
+    properties: [
+      {
+        id: 'direction',
+        label: 'app.meteo.meteo-blue.wind.direction',
+        type: 'string',
+      },
+      {
+        id: 'speed',
+        label: 'app.meteo.meteo-blue.wind.speed',
+        type: 'number',
+        format: {
+          maximumFractionDigits: 2,
+          unit: 'kilometer-per-hour',
+        },
+        unit: 'km/h',
+      },
+      {
+        id: 'gust',
+        label: 'app.meteo.meteo-blue.wind.gust',
+        type: 'number',
+        unit: 'km/h',
+        format: {
+          maximumFractionDigits: 2,
+          unit: 'kilometer-per-hour',
+        },
+      },
+    ],
+  },
+  {
+    id: 'rain',
+    label: 'app.meteo.rain',
+    type: 'number',
+    unit: 'mm',
+  },
+  {
+    id: 'clouds',
+    label: 'app.meteo.clouds',
+    type: 'string',
+  },
+  {
+    id: 'temperature',
+    label: 'app.meteo.temperature',
+    type: 'number',
+    unit: '°C',
+  },
+];
+
 export default async function (fastify: FastifyInstance) {
+  fastify.get<{ Reply: StructureMeteoResponseType }>(
+    '/structure',
+    async function () {
+      const structure: StructureMeteoResponseType = {
+        hourRanges: ['09-12', '12-16', '16-19'],
+        properties:  [
+          {
+            id: 'wind',
+            label: 'app.meteo.wind',
+            properties: [
+              {
+                id: 'direction',
+                label: 'app.meteo.meteo-blue.wind.direction',
+              },
+              {
+                id: 'speed',
+                label: 'app.meteo.meteo-blue.wind.speed',
+              },
+              {
+                id: 'gust',
+                label: 'app.meteo.meteo-blue.wind.gust',
+              },
+            ],
+          },
+          {
+            id: 'rain',
+            label: 'app.meteo.rain',
+          },
+          {
+            id: 'clouds',
+            label: 'app.meteo.clouds',
+          },
+          {
+            id: 'temperature',
+            label: 'app.meteo.temperature',
+          },
+        ],
+      };
+
+      return structure;
+    }
+  );
+
   fastify.get<{
+    Body: StructureMeteoQueryType;
     Querystring: { lat: number; lon: number; startDate: string };
     Reply: MeteoType | null | string;
   }>('/meteo', async function (request) {
     const { lat, lon, startDate } = request.query;
-    const properties: PropertyDefinition = {
-      wind: {
-        label: 'app.meteo.wind',
-        type: 'object',
-        properties: {
-          direction: {
-            label: 'app.meteo.meteo-blue.wind.direction',
-            type: 'string',
-          },
-          speed: {
-            label: 'app.meteo.meteo-blue.wind.speed',
-            type: 'number',
-            format: {
-              maximumFractionDigits: 2,
-              unit: 'kilometer-per-hour',
-            },
-            unit: 'km/h',
-          },
-          gust: {
-            label: 'app.meteo.meteo-blue.wind.gust',
-            type: 'number',
-            unit: 'km/h',
-            format: {
-              maximumFractionDigits: 2,
-              unit: 'kilometer-per-hour',
-            },
-          },
-        },
-      },
-      rain: {
-        label: 'app.meteo.rain',
-        type: 'number',
-        unit: 'mm',
-      },
-      clouds: {
-        label: 'app.meteo.clouds',
-        type: 'string',
-      },
-      temperature: {
-        label: 'app.meteo.temperature',
-        type: 'number',
-        unit: '°C',
-      },
-    };
+    const { hourRanges, propertyIds } = request.body;
 
-    //todo: récupérer les hourRanges depuis la query
-    const hourRanges = ['09-12', '12-16', '16-19'];
     const date = new Date(
       new Date(
         Number(startDate.slice(0, 4)),
@@ -121,14 +176,14 @@ export default async function (fastify: FastifyInstance) {
     const meteoBlueDataPromise = getMeteoBlueData({
       latitude: lat,
       longitude: lon,
-      hourRanges,
+      hourRanges: hourRanges,
       date,
     });
 
     const meteoParapenteDataPromise = getMeteoParapenteData({
       latitude: lat,
       longitude: lon,
-      hourRanges,
+      hourRanges: hourRanges,
       date,
     });
 
@@ -216,10 +271,6 @@ export default async function (fastify: FastifyInstance) {
       data[key] = dataProperty;
     }
     const meteoResponse: MeteoType = {
-      structure: {
-        hourRanges,
-        properties: Object.keys(properties),
-      },
       data,
     };
 

@@ -4,6 +4,29 @@ import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc';
 import { MeteoStandardProviderStructure } from '../../types';
 import { logger } from '../utils/logger';
 
+const meteoParapenteStatySchema = z.object({
+  france: z.array(
+    z.object({
+      run: z.string(),
+      day: z.string(),
+      private: z.boolean(),
+      status: z.string(),
+      update: z.string().optional(),
+    })
+  ),
+  app: z.object({
+    favored: z.string(),
+    minimal: z.string(),
+  }),
+  js: z.object({
+    manifest: z.string(),
+    vendor: z.string(),
+    client: z.string(),
+  }),
+  tos: z.string(),
+  news: z.array(z.string()),
+});
+
 const meteoParapenteDataSchema = z.object({
   z: z.number().array(),
   umet: z.number().array(),
@@ -61,13 +84,35 @@ const computeWindProfile = (umet: number, vmet: number, z: number) => {
   };
 };
 
+const getMeteoParapenteInitValue = async () => {
+  const url = 'https://data0.meteo-parapente.com/status.php';
+  const response = await ky.get(url);
+  const json = await response.json();
+  const meteoParapenteInitValueResponse =
+    meteoParapenteStatySchema.safeParse(json);
+
+  if (meteoParapenteInitValueResponse.error) {
+    logger.error(meteoParapenteInitValueResponse.error);
+    logger.error(json);
+    return null;
+  }
+
+  if (!meteoParapenteInitValueResponse.data) {
+    logger.error('No data for meteoParapente');
+    return null;
+  }
+
+  return meteoParapenteInitValueResponse.data.france.at(0)?.run;
+};
+
 const getMeteoParapenteDataForOneDay = async (
+  initValue: string,
   date: string,
   lat: number,
   lon: number,
   hourRanges: string[]
 ) => {
-  const url = `https://data0.meteo-parapente.com/data.php?run=${date}00&location=${lat},${lon}&date=${date}&plot=windgram`;
+  const url = `https://data0.meteo-parapente.com/data.php?run=${initValue}&location=${lat},${lon}&date=${date}&plot=windgram`;
   logger.info(
     { file: 'meteoParapente', function: 'getMeteoParapenteDataForOneDay' },
     `fetching data from ${url}`
@@ -140,23 +185,24 @@ export const getMeteoParapenteData = async ({
   hourRanges: string[];
   date: Date;
 }) => {
-  /* for (let i = 0; i < 7; i++) {
-    const formattedDate = formatDateYYYYMMDD(
-      new Date(new Date().setDate(date.getDate() + i))
-    );
-    data[formattedDate] = await getMeteoParapenteDataForOneDay(
-      formattedDate,
-      latitude,
-      longitude,
-      hourRanges
-    );
-  }*/
+  const initValue = await getMeteoParapenteInitValue();
+
+  if (!initValue) {
+    logger.error('No init value for meteoParapente');
+    return null;
+  }
 
   const dataDay = await getMeteoParapenteDataForOneDay(
+    initValue,
     formatDateYYYYMMDD(date),
     latitude,
     longitude,
     hourRanges
+  );
+
+  logger.info(
+    { file: 'meteoParapente', function: 'getMeteoParapenteData' },
+    `dataDay: ${JSON.stringify(dataDay, null, 2)}`
   );
 
   if (!dataDay) {

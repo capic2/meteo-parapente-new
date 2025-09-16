@@ -2,7 +2,7 @@ import { getMeteoParapenteData } from './meteoParapente';
 import { describe, expect, it } from 'vitest';
 import { MeteoStandardProviderStructure } from '../../types';
 
-describe.skip('meteoParapente', () => {
+describe('meteoParapente', () => {
   it('should return data', async () => {
     const data = await getMeteoParapenteData({
       latitude: 46.971161,

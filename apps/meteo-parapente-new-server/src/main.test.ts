@@ -78,16 +78,19 @@ describe('main', () => {
 
   describe('/meteo', () => {
     it('returns 200', async () => {
-      const response = await server.inject({
+      const response = server.inject({
         method: 'GET',
-        url: '/meteo?startDate=20250819&lat=46.971161&lon=5.885981',
-        body: {
-          hourRanges: ['09-12', '12-16', '16-19'],
+        url: '/meteo',
+        query: {
+          startDate: '20250819',
+          lat: '46.971161',
+          lon: '5.885981',
           propertyIds: ['wind', 'rain', 'clouds', 'temperature'],
+          hourRanges: ['09-12', '12-16', '16-19'],
         },
       });
 
-      expect(response.statusCode).toBe(200);
+      expect((await response).statusCode).toBe(200);
     });
 
     it('returns data', async () => {

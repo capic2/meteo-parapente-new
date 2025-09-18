@@ -7,16 +7,21 @@ export const dataTableRow = tv({
   base: 'not-last:border-b border-gray-200 hover:bg-gray-100',
 });
 
-export type DataTableRowProps<T extends object> = VariantProps<
-  typeof dataTableRow
-> &
-  RowProps<T>;
+export interface DataTableRowProps<T extends object>
+  extends VariantProps<typeof dataTableRow>,
+    RowProps<T> {
+  isRaw?: boolean;
+}
 
 const DataTableRowInternal = <T extends object>(
-  { children, ...rest }: DataTableRowProps<T>,
+  { children, isRaw = false, ...rest }: DataTableRowProps<T>,
   ref: ForwardedRef<HTMLDivElement>
 ) => {
-  return (
+  return isRaw ? (
+    <tr ref={ref} className={dataTableRow()}>
+      {children}
+    </tr>
+  ) : (
     <Row ref={ref} className={dataTableRow()} {...rest}>
       {children}
     </Row>

@@ -1,29 +1,43 @@
 import {
   DataTable,
   DataTableBody,
+  DataTableCell,
   DataTableColumn,
   DataTableHeader,
   DataTableRow,
-  DataTableRowHeader,
 } from '@meteo-parapente-new/design-system';
 import { MeteoDataTableCell } from './parts/MeteoDataTableCell';
+import {
+  MeteoType,
+  StructureMeteoResponseType,
+} from '@meteo-parapente-new/common-types';
 import { FormattedMessage } from 'react-intl';
-import { MeteoType } from '@meteo-parapente-new/common-types';
-import { isPropertyWithSubProperties } from '../../utils/misc';
 
 interface MeteoDataTableProps {
+  structure: StructureMeteoResponseType;
   meteoResponse: MeteoType | undefined;
   isLoading?: boolean;
 }
 
-const MeteoDataTable = ({ meteoResponse, isLoading }: MeteoDataTableProps) => {
+const MeteoDataTable = ({
+  structure,
+  meteoResponse,
+  isLoading,
+}: MeteoDataTableProps) => {
+  /*const rows = !meteoResponse
+    ? []
+    : Object.entries(meteoResponse).map(([key, value]) => {
+        return {
+          id: key,
 
+      });
+  */
   return (
     <DataTable aria-label="MeteoDataTable" isLoading={isLoading}>
       <DataTableHeader
         columns={[
-          { id: 'row', name: '', isRowHeader: false },
-          ...meteoResponse.structure.hourRanges.map((hourRange) => ({
+          { id: 'row', name: '', isRowHeader: true },
+          ...structure.hourRanges.map((hourRange) => ({
             id: hourRange,
             name: hourRange,
             isRowHeader: false,
@@ -42,8 +56,18 @@ const MeteoDataTable = ({ meteoResponse, isLoading }: MeteoDataTableProps) => {
           </DataTableColumn>
         )}
       </DataTableHeader>
-      <DataTableBody>
-        {meteoResponse.structure.properties.map((property, index) => {
+      <DataTableBody
+        /*renderLoadingState={structure.properties.map((property) => {
+          return (
+            <DataTableRow>
+              <DataTableCell>
+                <FormattedMessage id={property.label} />
+              </DataTableCell>
+            </DataTableRow>
+          );
+        })}*/
+      >
+        {/*meteoResponse.structure.properties.map((property, index) => {
           return (
             <DataTableRow key={`${property}-${index}`}>
               <DataTableRowHeader>
@@ -78,7 +102,7 @@ const MeteoDataTable = ({ meteoResponse, isLoading }: MeteoDataTableProps) => {
               })}
             </DataTableRow>
           );
-        })}
+        })*/}
       </DataTableBody>
     </DataTable>
   );

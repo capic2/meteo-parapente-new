@@ -1,6 +1,13 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { queryOptions, useQuery } from '@tanstack/react-query';
-import { meteoSchema } from '@meteo-parapente-new/common-types';
+import {
+  queryOptions,
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
+import {
+  meteoSchema,
+  structureMeteoResponseSchema,
+} from '@meteo-parapente-new/common-types';
 import { FormattedDate } from 'react-intl';
 import { MeteoDataTable } from '../components/meteo-data-table/MeteoDataTable';
 import ky from 'ky';
@@ -12,32 +19,50 @@ import {
   Pagination,
 } from '@meteo-parapente-new/design-system';
 
-const meteoOptions = (startDate: string, lat: number, lon: number) =>
+const meteoStructureOptions = () =>
   queryOptions({
-    queryKey: ['meteo', startDate, lat, lon],
+    queryKey: ['structure'],
     queryFn: async () => {
       const response = await ky.get(
-        `${
-          import.meta.env.VITE_API_URL
-        }/meteo?startDate=${startDate}&lat=${lat}&lon=${lon}`
+        `${import.meta.env.VITE_API_URL}/structure`
       );
       const json = await response.json();
 
-      return meteoSchema.safeParse(json);
+      return structureMeteoResponseSchema.safeParse(json);
     },
     retry: false,
   });
 
+const meteoOptions = (
+  startDate: string,
+  lat: number,
+  lon: number,
+  hourRanges: string[] | undefined,
+  propertyIds: string[] | undefined
+) => {
+  return queryOptions({
+    queryKey: ['meteo', startDate, lat, lon, hourRanges, propertyIds],
+    queryFn: async () => {
+      const response = await ky.get(`${import.meta.env.VITE_API_URL}/meteo`, {
+        searchParams: {
+          startDate,
+          lat: String(lat),
+          lon: String(lon),
+          hourRanges: hourRanges?.join(',') ?? '',
+          propertyIds: propertyIds?.join(',') ?? '',
+        },
+      });
+      const json = await response.json();
+      return meteoSchema.safeParse(json);
+    },
+    enabled: Boolean(hourRanges && propertyIds),
+    retry: false,
+  });
+};
+
 export const Route = createFileRoute('/')({
-  loaderDeps: ({ search: { startDate, lat, lon } }) => ({
-    startDate,
-    lat,
-    lon,
-  }),
   loader: ({ context, deps }) =>
-    context.queryClient.ensureQueryData(
-      meteoOptions(deps.startDate, deps.lat, deps.lon)
-    ),
+    context.queryClient.ensureQueryData(meteoStructureOptions()),
   component: Index,
   validateSearch: z.object({
     startDate: z
@@ -52,18 +77,27 @@ export const Route = createFileRoute('/')({
 
 export function Index() {
   const { startDate, lat, lon } = Route.useSearch();
-  const { data, isFetching } = useQuery(meteoOptions(startDate, lat, lon));
+  const { data: structureData } = useSuspenseQuery(meteoStructureOptions());
+  const { data: meteoData, isFetching } = useQuery(
+    meteoOptions(
+      startDate,
+      lat,
+      lon,
+      structureData?.data?.hourRanges,
+      structureData?.data?.properties.map((property) => property.id)
+    )
+  );
   const navigate = useNavigate();
 
-  if (!isFetching && data?.error) {
+  if (structureData?.error) {
     return (
       <div className="flex h-screen items-center justify-center">
-        {data.error.message}
+        {structureData.error.message}
       </div>
     );
   }
 
-  if (!isFetching && !data?.data) {
+  if (!structureData?.data) {
     return <div>No data</div>;
   }
 
@@ -118,7 +152,7 @@ export function Index() {
           }
         />
       </h1>
-      <MeteoDataTable meteoResponse={data?.data} isLoading={isFetching} />
+      <MeteoDataTable structure={structureData.data} meteoResponse={meteoData?.data} isLoading={isFetching} />
       <Maps
         className="h-[500px]"
         latitude={lat}

@@ -40,7 +40,6 @@ const meteoProperty = z.object({
         meteoParapente: meteoData.optional(),
       })
     )
-    .optional(),
 });
 
 const propertyWithSubPropertiesSchema = z.object({

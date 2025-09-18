@@ -1,39 +1,35 @@
 import { ForwardedRef, forwardRef, JSX } from 'react';
-import type { VariantProps } from 'tailwind-variants';
-import { tv } from 'tailwind-variants';
 import { TableBody, TableBodyProps } from 'react-aria-components';
 import { DataTableRowProps } from './DataTableRow';
-import { useDataTableContext } from '../DataTable.context';
 import { DataTableBodyLoading } from './DataTableBodyLoading';
-import { DataTableBodyNoData } from './DataTableBodyNoData';
+import { useDataTableContext } from '../DataTable.context';
 
-export const dataTableBody = tv({
-  // add the component styles
-  base: '',
-});
-
-export type DataTableBodyProps<T extends object> = VariantProps<
-  typeof dataTableBody
-> &
-  TableBodyProps<T>;
+export interface DataTableBodyProps<T extends object>
+  extends Omit<TableBodyProps<T>, 'renderEmptyState'> {
+  renderEmptyState?: JSX.Element;
+  renderLoadingState?: JSX.Element;
+}
 
 const DataTableBodyInternal = <T extends object>(
-  { children, ...rest }: DataTableBodyProps<T>,
+  {
+    children,
+    renderEmptyState,
+    renderLoadingState,
+    ...rest
+  }: DataTableBodyProps<T>,
   ref: ForwardedRef<HTMLDivElement>
 ) => {
-  const { isLoading,items } = useDataTableContext();
-  console.log({ isLoading });
+  const { isLoading } = useDataTableContext();
+
+    const LoadingState = renderLoadingState ? (
+      renderLoadingState
+    ) : (
+      <DataTableBodyLoading />
+    );
+
   return (
-    <TableBody
-      ref={ref}
-      items={items}
-      className={dataTableBody()}
-      renderEmptyState={() =>
-        isLoading ? <DataTableBodyLoading /> : <DataTableBodyNoData />
-      }
-      {...rest}
-    >
-      {children}
+    <TableBody ref={ref} {...rest}>
+      {isLoading ? LoadingState : children}
     </TableBody>
   );
 };

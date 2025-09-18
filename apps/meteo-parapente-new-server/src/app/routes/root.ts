@@ -29,7 +29,7 @@ type PropertyDefinitions = Array<BaseProperty | ObjectProperty>;
 const handleProperty = ({
   provider,
   propertyId,
-                          subPropertyId,
+  subPropertyId,
   hourRange,
   type,
   format,
@@ -220,39 +220,37 @@ export default async function (fastify: FastifyInstance) {
         ...(property.type === 'object'
           ? {
               properties: Object.fromEntries(
-                property.properties.map(
-                  (subProperty) => [
-                    subProperty.id,
-                    {
-                      ...('unit' in subProperty && {
-                        unit: subProperty.unit,
-                      }),
-                      ranges: Object.fromEntries(
-                        hourRanges.map((hourRange) => [
-                          hourRange,
-                          {
-                            meteoBlue: handleProperty({
-                              provider: meteoBlueData,
-                              propertyId,
-                              subPropertyId: subProperty.id,
-                              hourRange,
-                              type: subProperty.type,
-                              format: subProperty.format,
-                            }),
-                            meteoParapente: handleProperty({
-                              provider: meteoParapenteData,
-                              propertyId,
-                              subPropertyId: subProperty.id,
-                              hourRange,
-                              type: subProperty.type,
-                              format: subProperty.format,
-                            }),
-                          },
-                        ])
-                      ),
-                    },
-                  ]
-                )
+                property.properties.map((subProperty) => [
+                  subProperty.id,
+                  {
+                    ...('unit' in subProperty && {
+                      unit: subProperty.unit,
+                    }),
+                    ranges: Object.fromEntries(
+                      hourRanges.map((hourRange) => [
+                        hourRange,
+                        {
+                          meteoBlue: handleProperty({
+                            provider: meteoBlueData,
+                            propertyId,
+                            subPropertyId: subProperty.id,
+                            hourRange,
+                            type: subProperty.type,
+                            format: subProperty.format,
+                          }),
+                          meteoParapente: handleProperty({
+                            provider: meteoParapenteData,
+                            propertyId,
+                            subPropertyId: subProperty.id,
+                            hourRange,
+                            type: subProperty.type,
+                            format: subProperty.format,
+                          }),
+                        },
+                      ])
+                    ),
+                  },
+                ])
               ),
             }
           : {

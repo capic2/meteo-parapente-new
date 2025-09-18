@@ -7,18 +7,22 @@ import { tv } from 'tailwind-variants';
 import { Column } from 'react-aria-components';
 
 export const dataTableRowHeader = tv({
-  base: "bg-gray-50 group px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+  base: 'bg-gray-50 group px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
 });
 
-export type DataTableRowHeaderProps = PropsWithChildren<
-  VariantProps<typeof dataTableRowHeader>
->;
+export interface DataTableRowHeaderProps
+  extends PropsWithChildren<VariantProps<typeof dataTableRowHeader>> {
+  isRaw?: boolean;
+}
 
 const DataTableRowHeader = forwardRef<HTMLDivElement, DataTableRowHeaderProps>(
-  ({ children, ...rest }, ref) => {
-    return (
+  ({ children, isRaw = false, ...rest }, ref) => {
+    return isRaw ? (
+      <th ref={ref} className={dataTableRowHeader()}>
+        {children}
+      </th>
+    ) : (
       <Column
-        isRowHeader={true}
         ref={ref}
         className={dataTableRowHeader()}
         {...rest}

@@ -10,58 +10,22 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "platform": "node",
-        "outputPath": "apps/meteo-parapente-new-server/dist",
-        "format": ["cjs"],
-        "bundle": false,
         "main": "apps/meteo-parapente-new-server/src/main.ts",
+        "outputPath": "apps/meteo-parapente-new-server/dist",
+        "outputFileName": "main.js",
         "tsConfig": "apps/meteo-parapente-new-server/tsconfig.app.json",
-        "assets": ["apps/meteo-parapente-new-server/src/assets"],
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
+        "platform": "node",
+        "format": ["esm"],
+        "declarationRootDir": "apps/meteo-parapente-new-server/src"
       },
       "configurations": {
-        "development": {},
+        "development": {
+          "minify": false
+        },
         "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
+          "minify": true
         }
       }
-    },
-    "prune-lockfile": {
-      "dependsOn": ["build"],
-      "cache": true,
-      "executor": "@nx/js:prune-lockfile",
-      "outputs": [
-        "{workspaceRoot}/apps/meteo-parapente-new-server/dist/package.json",
-        "{workspaceRoot}/apps/meteo-parapente-new-server/dist/package-lock.json"
-      ],
-      "options": {
-        "buildTarget": "build"
-      }
-    },
-    "copy-workspace-modules": {
-      "dependsOn": ["build"],
-      "cache": true,
-      "outputs": [
-        "{workspaceRoot}/apps/meteo-parapente-new-server/dist/workspace_modules"
-      ],
-      "executor": "@nx/js:copy-workspace-modules",
-      "options": {
-        "buildTarget": "build"
-      }
-    },
-    "prune": {
-      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
-      "executor": "nx:noop"
     },
     "serve": {
       "continuous": true,

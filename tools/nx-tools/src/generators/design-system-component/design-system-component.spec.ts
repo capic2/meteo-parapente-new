@@ -10,7 +10,7 @@ const createProject = () => {
     '/lib/design-system/project.json',
     `
      {
-        "name": "design-system",
+        "name": "@meteo-parapente-new/design-system",
         "$schema": "../../node_modules/nx/schemas/nx-schema.json",
         "projectType": "library",
         "sourceRoot": "lib/design-system/src",

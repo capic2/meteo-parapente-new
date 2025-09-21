@@ -1,8 +1,9 @@
 import ky from 'ky';
 import { z } from 'zod';
-import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc';
-import { MeteoStandardProviderStructure } from '../../types';
-import { logger } from '../utils/logger';
+import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc.js';
+import { MeteoStandardProviderStructure } from '../../types.js';
+import { logger } from '../utils/logger.js';
+import { allSettledWithIds } from '../utils/promise.js';
 
 const meteoBlueBasic1hDaySchema = z
   .object({
@@ -302,22 +303,27 @@ export const getMeteoBlueData = async ({
   hourRanges: string[];
   date: Date;
 }) => {
-  //TODO: réupérer les données en parallèle
-  const windData = await getMeteoBlueWindData(latitude, longitude, hourRanges);
-  const basicData = await getMeteoBlueBasicData(
-    latitude,
-    longitude,
-    hourRanges
+  logger.info({ file: 'meteoBlue', function: 'getMeteoBlueData' }, `latitude: ${latitude}, longitude: ${longitude}, hourRanges: ${hourRanges}, date: ${date}`);
+
+  const windPromise = getMeteoBlueWindData(latitude, longitude, hourRanges);
+  const basicPromise = getMeteoBlueBasicData(latitude, longitude, hourRanges);
+
+  const results = await allSettledWithIds([
+    { id: 'wind', promise: windPromise },
+    { id: 'basic', promise: basicPromise },
+  ]);
+
+  const windData = results.find((result) => result.id === 'wind')?.value;
+  const basicData = results.find((result) => result.id === 'basic')?.value;
+
+  logger.info(
+    { file: 'meteoBlue', function: 'getMeteoBlueData' },
+    `windData: ${JSON.stringify(windData, null, 2)}`
   );
 
-  logger.debug(
+  logger.info(
     { file: 'meteoBlue', function: 'getMeteoBlueData' },
-    `windData: ${JSON.stringify(windData)}`
-  );
-
-  logger.debug(
-    { file: 'meteoBlue', function: 'getMeteoBlueData' },
-    `basicData: ${JSON.stringify(basicData)}`
+    `basicData: ${JSON.stringify(basicData, null, 2)}`
   );
 
   if (!windData || !basicData) {

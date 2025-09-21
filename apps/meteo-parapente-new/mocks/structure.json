@@ -1,0 +1,35 @@
+{
+  "hourRanges": ["09-12", "12-16", "16-19"],
+  "properties": [
+    {
+      "id": "wind",
+      "label": "app.meteo.wind",
+      "properties": [
+        {
+          "id": "direction",
+          "label": "app.meteo.meteo-blue.wind.direction"
+        },
+        {
+          "id": "speed",
+          "label": "app.meteo.meteo-blue.wind.speed"
+        },
+        {
+          "id": "gust",
+          "label": "app.meteo.meteo-blue.wind.gust"
+        }
+      ]
+    },
+    {
+      "id": "rain",
+      "label": "app.meteo.rain"
+    },
+    {
+      "id": "clouds",
+      "label": "app.meteo.clouds"
+    },
+    {
+      "id": "temperature",
+      "label": "app.meteo.temperature"
+    }
+  ]
+}

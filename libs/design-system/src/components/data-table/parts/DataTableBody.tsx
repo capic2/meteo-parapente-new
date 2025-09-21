@@ -1,46 +1,30 @@
-import { ForwardedRef, forwardRef, JSX } from 'react';
-import type { VariantProps } from 'tailwind-variants';
-import { tv } from 'tailwind-variants';
-import { TableBody, TableBodyProps } from 'react-aria-components';
-import { DataTableRowProps } from './DataTableRow';
+import { forwardRef, JSX, ReactElement, ReactNode } from 'react';
+import { DataTableBodyLoading } from './DataTableBodyLoading';
+import { useDataTableContext } from '../DataTable.context';
 
-export const dataTableBody = tv({
-  // add the component styles
-  base: '',
-});
+export interface DataTableBodyProps {
+  renderEmptyBodyContentState?: JSX.Element;
+  renderLoadingBodyContentState?: ReactElement | ReactElement[];
+  children: ReactNode;
+}
 
-export type DataTableBodyProps<T extends object> = VariantProps<
-  typeof dataTableBody
-> &
-  TableBodyProps<T>;
+const DataTableBody = forwardRef<HTMLDivElement, DataTableBodyProps>(
+  ({ children, renderEmptyBodyContentState, renderLoadingBodyContentState, ...rest }, ref) => {
+    const { isLoading } = useDataTableContext();
 
-const DataTableBodyInternal = <T extends object>(
-  { children, ...rest }: DataTableBodyProps<T>,
-  ref: ForwardedRef<HTMLDivElement>
-) => {
-  return (
-    <TableBody ref={ref} className={dataTableBody()} {...rest}>
-      {children}
-    </TableBody>
-  );
-};
+    const LoadingState = renderLoadingBodyContentState ? (
+      renderLoadingBodyContentState
+    ) : (
+      <DataTableBodyLoading />
+    );
 
-type DataTableRowComponent = (<T extends object>(
-  props: DataTableRowProps<T> & {
-    ref?: ForwardedRef<HTMLDivElement>;
+    return (
+      <tbody ref={ref} {...rest}>
+        {isLoading ? LoadingState : children}
+      </tbody>
+    );
   }
-) => JSX.Element) & {
-  displayName?: string;
-};
-
-const DataTableBody = forwardRef(
-  <T extends object>(
-    props: DataTableBodyProps<T>,
-    ref: ForwardedRef<HTMLDivElement>
-  ) => {
-    return DataTableBodyInternal<T>(props, ref);
-  }
-) as DataTableRowComponent;
+);
 
 DataTableBody.displayName = 'DataTableBody';
 

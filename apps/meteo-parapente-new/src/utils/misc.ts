@@ -1,6 +1,7 @@
 import {
   MeteoPropertyWithSubPropertiesType,
   MeteoType,
+  StructureMeteoResponseType,
 } from '@meteo-parapente-new/common-types';
 
 export function formatDateYYYYMMDD(date: Date): string {
@@ -23,7 +24,17 @@ export function formatedDateToDate(date: string | undefined): Date {
 }
 
 export function isPropertyWithSubProperties(
-  data: MeteoType['data'][number]
+  data: MeteoType[number] | undefined,
+  structure: StructureMeteoResponseType,
+  key: string
 ): data is MeteoPropertyWithSubPropertiesType {
-  return 'properties' in data;
+  return (
+    !!data &&
+    structure.properties.find((property) => property.id === key)?.properties !==
+      undefined
+  );
+}
+
+export function meteoDataToRow(data: MeteoType['data']) {
+  return data;
 }

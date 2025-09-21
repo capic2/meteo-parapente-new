@@ -1,44 +1,24 @@
-import { ForwardedRef, forwardRef, JSX } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
-import { Row, RowProps } from 'react-aria-components';
 
 export const dataTableRow = tv({
   base: 'not-last:border-b border-gray-200 hover:bg-gray-100',
 });
 
-export type DataTableRowProps<T extends object> = VariantProps<
-  typeof dataTableRow
-> &
-  RowProps<T>;
+export interface DataTableRowProps extends VariantProps<typeof dataTableRow> {
+  children: ReactNode;
+}
 
-const DataTableRowInternal = <T extends object>(
-  { children, ...rest }: DataTableRowProps<T>,
-  ref: ForwardedRef<HTMLDivElement>
-) => {
-  return (
-    <Row ref={ref} className={dataTableRow()} {...rest}>
-      {children}
-    </Row>
-  );
-};
-
-type DataTableRowComponent = (<T extends object>(
-  props: DataTableRowProps<T> & {
-    ref?: ForwardedRef<HTMLDivElement>;
+const DataTableRow = forwardRef<HTMLDivElement, DataTableRowProps>(
+  ({ children, ...rest }, ref) => {
+    return (
+      <tr ref={ref} className={dataTableRow()} {...rest}>
+        {children}
+      </tr>
+    );
   }
-) => JSX.Element) & {
-  displayName?: string;
-};
-
-const DataTableRow = forwardRef(
-  <T extends object>(
-    props: DataTableRowProps<T>,
-    ref: ForwardedRef<HTMLDivElement>
-  ) => {
-    return DataTableRowInternal<T>(props, ref);
-  }
-) as DataTableRowComponent;
+);
 
 DataTableRow.displayName = 'DataTableRow';
 

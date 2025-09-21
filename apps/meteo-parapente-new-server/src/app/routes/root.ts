@@ -1,11 +1,16 @@
 import { FastifyInstance } from 'fastify';
-import { getMeteoBlueData } from '../meteo/meteoBlue';
-import { MeteoType } from '@meteo-parapente-new/common-types';
-import { getMeteoParapenteData } from '../meteo/meteoParapente';
-import { allSettledWithIds } from '../utils/promise';
-import { MeteoStandardProviderStructure } from '../../types';
+import { getMeteoBlueData } from '../meteo/meteoBlue.js';
+import {
+  DataMeteoQueryInputType,
+  MeteoType,
+  StructureMeteoResponseType,
+} from '@meteo-parapente-new/common-types';
+import { getMeteoParapenteData } from '../meteo/meteoParapente.js';
+import { allSettledWithIds } from '../utils/promise.js';
+import { MeteoStandardProviderStructure } from '../../types.js';
 
 type BaseProperty = {
+  id: string;
   label: string;
   type: 'number' | 'string';
   unit?: string;
@@ -13,24 +18,25 @@ type BaseProperty = {
 };
 
 type ObjectProperty = {
+  id: string;
   label: string;
   type: 'object';
-  properties: Record<string, BaseProperty>;
+  properties: Array<BaseProperty>;
 };
 
-type PropertyDefinition = Record<string, BaseProperty | ObjectProperty>;
+type PropertyDefinitions = Array<BaseProperty | ObjectProperty>;
 
 const handleProperty = ({
   provider,
-  key,
-  propertyKey,
+  propertyId,
+  subPropertyId,
   hourRange,
   type,
   format,
 }: {
   provider: MeteoStandardProviderStructure | null | undefined;
-  key: string;
-  propertyKey?: string;
+  propertyId: string;
+  subPropertyId?: string;
   hourRange: string;
   type: 'number' | 'string';
   format?: Intl.NumberFormatOptions;
@@ -39,12 +45,14 @@ const handleProperty = ({
     return '_';
   }
 
-  const value = propertyKey
-    ? provider[key] &&
-      provider[key][propertyKey] &&
+  const value = subPropertyId
+    ? provider[propertyId] &&
+      provider[propertyId][subPropertyId] &&
       // @ts-expect-error to fix
-      provider[key][propertyKey][hourRange]
-    : provider[key] && provider[key] && provider[key][hourRange];
+      provider[propertyId][subPropertyId][hourRange]
+    : provider[propertyId] &&
+      provider[propertyId] &&
+      provider[propertyId][hourRange];
 
   if (!value) {
     return '_';
@@ -57,59 +65,119 @@ const handleProperty = ({
   return new Intl.NumberFormat('fr-Fr', format).format(value);
 };
 
-export default async function (fastify: FastifyInstance) {
-  fastify.get<{
-    Querystring: { lat: number; lon: number; startDate: string };
-    Reply: MeteoType | null | string;
-  }>('/meteo', async function (request) {
-    const { lat, lon, startDate } = request.query;
-    const properties: PropertyDefinition = {
-      wind: {
-        label: 'app.meteo.wind',
-        type: 'object',
-        properties: {
-          direction: {
-            label: 'app.meteo.meteo-blue.wind.direction',
-            type: 'string',
-          },
-          speed: {
-            label: 'app.meteo.meteo-blue.wind.speed',
-            type: 'number',
-            format: {
-              maximumFractionDigits: 2,
-              unit: 'kilometer-per-hour',
-            },
-            unit: 'km/h',
-          },
-          gust: {
-            label: 'app.meteo.meteo-blue.wind.gust',
-            type: 'number',
-            unit: 'km/h',
-            format: {
-              maximumFractionDigits: 2,
-              unit: 'kilometer-per-hour',
-            },
-          },
-        },
-      },
-      rain: {
-        label: 'app.meteo.rain',
-        type: 'number',
-        unit: 'mm',
-      },
-      clouds: {
-        label: 'app.meteo.clouds',
+const propertyDefinitions: PropertyDefinitions = [
+  {
+    id: 'wind',
+    label: 'app.meteo.wind',
+    type: 'object',
+    properties: [
+      {
+        id: 'direction',
+        label: 'app.meteo.meteo-blue.wind.direction',
         type: 'string',
       },
-      temperature: {
-        label: 'app.meteo.temperature',
+      {
+        id: 'speed',
+        label: 'app.meteo.meteo-blue.wind.speed',
         type: 'number',
-        unit: '°C',
+        format: {
+          maximumFractionDigits: 2,
+          unit: 'kilometer-per-hour',
+        },
+        unit: 'km/h',
       },
-    };
+      {
+        id: 'gust',
+        label: 'app.meteo.meteo-blue.wind.gust',
+        type: 'number',
+        unit: 'km/h',
+        format: {
+          maximumFractionDigits: 2,
+          unit: 'kilometer-per-hour',
+        },
+      },
+    ],
+  },
+  {
+    id: 'rain',
+    label: 'app.meteo.rain',
+    type: 'number',
+    unit: 'mm',
+  },
+  {
+    id: 'clouds',
+    label: 'app.meteo.clouds',
+    type: 'string',
+  },
+  {
+    id: 'temperature',
+    label: 'app.meteo.temperature',
+    type: 'number',
+    unit: '°C',
+  },
+];
 
-    //todo: récupérer les hourRanges depuis la query
-    const hourRanges = ['09-12', '12-16', '16-19'];
+export default async function (fastify: FastifyInstance) {
+  fastify.get<{ Reply: StructureMeteoResponseType }>(
+    '/structure',
+    async function () {
+      const structure: StructureMeteoResponseType = {
+        hourRanges: ['09-12', '12-16', '16-19'],
+        properties: [
+          {
+            id: 'wind',
+            label: 'app.meteo.wind',
+            properties: [
+              {
+                id: 'direction',
+                label: 'app.meteo.meteo-blue.wind.direction',
+              },
+              {
+                id: 'speed',
+                label: 'app.meteo.meteo-blue.wind.speed',
+              },
+              {
+                id: 'gust',
+                label: 'app.meteo.meteo-blue.wind.gust',
+              },
+            ],
+          },
+          {
+            id: 'rain',
+            label: 'app.meteo.rain',
+          },
+          {
+            id: 'clouds',
+            label: 'app.meteo.clouds',
+          },
+          {
+            id: 'temperature',
+            label: 'app.meteo.temperature',
+          },
+        ],
+      };
+
+      return structure;
+    }
+  );
+
+  fastify.get<{
+    Querystring: DataMeteoQueryInputType;
+    Reply: MeteoType | null | string;
+  }>('/meteo', async function (request) {
+    /*const { lat, lon, startDate, propertyIds, hourRanges } =
+      dataMeteoQueryOutputSchema.parse(request.query);*/
+    const {
+      lat,
+      lon,
+      startDate,
+      propertyIds: propertyIdsString = 'wind,rain,clouds,temperature',
+      hourRanges: hourRangesString = '09-12,12-16,16-19',
+    } = request.query;
+
+    const propertyIds = propertyIdsString.split(',');
+    const hourRanges = hourRangesString.split(',');
+
     const date = new Date(
       new Date(
         Number(startDate.slice(0, 4)),
@@ -144,49 +212,52 @@ export default async function (fastify: FastifyInstance) {
       (result) => result.id === 'meteoParapente'
     )?.value;
 
-    const data: MeteoType['data'] = {};
+    const meteoResponse: MeteoType = {};
 
-    for (const [key, property] of Object.entries(properties)) {
-      const dataProperty: MeteoType['data'][keyof MeteoType['data']] = {
-        label: property.label,
+    for (const propertyId of propertyIds) {
+      const property = propertyDefinitions.find(
+        (property) => property.id === propertyId
+      );
+      if (!property) {
+        continue;
+      }
+
+      meteoResponse[propertyId] = {
         ...('unit' in property && { unit: property.unit }),
         ...(property.type === 'object'
           ? {
               properties: Object.fromEntries(
-                Object.entries(property.properties).map(
-                  ([propertyKey, propertyValue]) => [
-                    propertyKey,
-                    {
-                      label: propertyValue.label,
-                      ...('unit' in propertyValue && {
-                        unit: propertyValue.unit,
-                      }),
-                      ranges: Object.fromEntries(
-                        hourRanges.map((hourRange) => [
-                          hourRange,
-                          {
-                            meteoBlue: handleProperty({
-                              provider: meteoBlueData,
-                              key,
-                              propertyKey,
-                              hourRange,
-                              type: propertyValue.type,
-                              format: propertyValue.format,
-                            }),
-                            meteoParapente: handleProperty({
-                              provider: meteoParapenteData,
-                              key,
-                              propertyKey,
-                              hourRange,
-                              type: propertyValue.type,
-                              format: propertyValue.format,
-                            }),
-                          },
-                        ])
-                      ),
-                    },
-                  ]
-                )
+                property.properties.map((subProperty) => [
+                  subProperty.id,
+                  {
+                    ...('unit' in subProperty && {
+                      unit: subProperty.unit,
+                    }),
+                    ranges: Object.fromEntries(
+                      hourRanges.map((hourRange) => [
+                        hourRange,
+                        {
+                          meteoBlue: handleProperty({
+                            provider: meteoBlueData,
+                            propertyId,
+                            subPropertyId: subProperty.id,
+                            hourRange,
+                            type: subProperty.type,
+                            format: subProperty.format,
+                          }),
+                          meteoParapente: handleProperty({
+                            provider: meteoParapenteData,
+                            propertyId,
+                            subPropertyId: subProperty.id,
+                            hourRange,
+                            type: subProperty.type,
+                            format: subProperty.format,
+                          }),
+                        },
+                      ])
+                    ),
+                  },
+                ])
               ),
             }
           : {
@@ -196,14 +267,14 @@ export default async function (fastify: FastifyInstance) {
                   {
                     meteoBlue: handleProperty({
                       provider: meteoBlueData,
-                      key,
+                      propertyId,
                       hourRange,
                       type: property.type,
                       format: property.format,
                     }),
                     meteoParapente: handleProperty({
                       provider: meteoParapenteData,
-                      key,
+                      propertyId,
                       hourRange,
                       type: property.type,
                       format: property.format,
@@ -213,15 +284,7 @@ export default async function (fastify: FastifyInstance) {
               ),
             }),
       };
-      data[key] = dataProperty;
     }
-    const meteoResponse: MeteoType = {
-      structure: {
-        hourRanges,
-        properties: Object.keys(properties),
-      },
-      data,
-    };
 
     return meteoResponse;
   });

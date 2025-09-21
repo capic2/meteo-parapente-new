@@ -85,8 +85,8 @@ describe('main', () => {
           startDate: '20250819',
           lat: '46.971161',
           lon: '5.885981',
-          propertyIds: ['wind', 'rain', 'clouds', 'temperature'],
-          hourRanges: ['09-12', '12-16', '16-19'],
+          propertyIds: 'wind,rain,clouds,temperature',
+          hourRanges: '09-12,12-16,16-19',
         },
       });
 
@@ -101,64 +101,10 @@ describe('main', () => {
           startDate: '20250819',
           lat: '46.971161',
           lon: '5.885981',
-          propertyIds: ['wind', 'rain', 'clouds', 'temperature'],
-          hourRanges: ['09-12', '12-16', '16-19'],
+          propertyIds: 'wind,rain,clouds,temperature',
+          hourRanges: '09-12,12-16,16-19',
         },
       });
-
-      /*const expcted = [
-        {
-          id: 'clouds',
-          ranges: [
-            { id: '09-12', meteoBlue: 0, meteoParapente: 0 },
-            { id: '12-16', meteoBlue: 0, meteoParapente: 0 },
-            { id: '16-19', meteoBlue: 0, meteoParapente: 0 },
-          ],
-        },
-        {
-          id: 'rain',
-          ranges: [
-            { id: '09-12', meteoBlue: 0, meteoParapente: 0 },
-            { id: '12-16', meteoBlue: 0, meteoParapente: 0 },
-            { id: '16-19', meteoBlue: 0, meteoParapente: 0 },
-          ],
-        },
-        {
-          id: 'temperature',
-          ranges: [
-            { id: '09-12', meteoBlue: 0, meteoParapente: 0 },
-            { id: '12-16', meteoBlue: 0, meteoParapente: 0 },
-            { id: '16-19', meteoBlue: 0, meteoParapente: 0 },
-          ],
-        },
-        {
-          id: 'wind',
-          property: 'direction',
-          ranges: [
-            { id: '09-12', meteoBlue: 'E', meteoParapente: 'E' },
-            { id: '12-16', meteoBlue: 'E', meteoParapente: 'E' },
-            { id: '16-19', meteoBlue: 'E', meteoParapente: 'E' },
-          ],
-        },
-        {
-          id: 'wind',
-          property: 'speed',
-          ranges: [
-            { id: '09-12', meteoBlue: 2.69, meteoParapente: 2.69 },
-            { id: '12-16', meteoBlue: 2.69, meteoParapente: 2.69 },
-            { id: '16-19', meteoBlue: 2.69, meteoParapente: 2.69 },
-          ],
-        },
-        {
-          id: 'wind',
-          property: 'gust',
-          ranges: [
-            { id: '09-12', meteoBlue: 2.69, meteoParapente: 2.69 },
-            { id: '12-16', meteoBlue: 2.69, meteoParapente: 2.69 },
-            { id: '16-19', meteoBlue: 2.69, meteoParapente: 2.69 },
-          ],
-        },
-      ];*/
 
       const expected: MeteoType = {
         clouds: {

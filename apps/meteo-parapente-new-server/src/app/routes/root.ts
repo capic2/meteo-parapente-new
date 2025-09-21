@@ -1,13 +1,13 @@
 import { FastifyInstance } from 'fastify';
-import { getMeteoBlueData } from '../meteo/meteoBlue';
+import { getMeteoBlueData } from '../meteo/meteoBlue.js';
 import {
+  DataMeteoQueryInputType,
   MeteoType,
-  StructureMeteoQueryType,
   StructureMeteoResponseType,
 } from '@meteo-parapente-new/common-types';
-import { getMeteoParapenteData } from '../meteo/meteoParapente';
-import { allSettledWithIds } from '../utils/promise';
-import { MeteoStandardProviderStructure } from '../../types';
+import { getMeteoParapenteData } from '../meteo/meteoParapente.js';
+import { allSettledWithIds } from '../utils/promise.js';
+import { MeteoStandardProviderStructure } from '../../types.js';
 
 type BaseProperty = {
   id: string;
@@ -162,14 +162,21 @@ export default async function (fastify: FastifyInstance) {
   );
 
   fastify.get<{
-    Querystring: {
-      lat: number;
-      lon: number;
-      startDate: string;
-    } & StructureMeteoQueryType;
+    Querystring: DataMeteoQueryInputType;
     Reply: MeteoType | null | string;
   }>('/meteo', async function (request) {
-    const { lat, lon, startDate, propertyIds, hourRanges } = request.query;
+    /*const { lat, lon, startDate, propertyIds, hourRanges } =
+      dataMeteoQueryOutputSchema.parse(request.query);*/
+    const {
+      lat,
+      lon,
+      startDate,
+      propertyIds: propertyIdsString = 'wind,rain,clouds,temperature',
+      hourRanges: hourRangesString = '09-12,12-16,16-19',
+    } = request.query;
+
+    const propertyIds = propertyIdsString.split(',');
+    const hourRanges = hourRangesString.split(',');
 
     const date = new Date(
       new Date(
@@ -182,14 +189,14 @@ export default async function (fastify: FastifyInstance) {
     const meteoBlueDataPromise = getMeteoBlueData({
       latitude: lat,
       longitude: lon,
-      hourRanges: hourRanges,
+      hourRanges,
       date,
     });
 
     const meteoParapenteDataPromise = getMeteoParapenteData({
       latitude: lat,
       longitude: lon,
-      hourRanges: hourRanges,
+      hourRanges,
       date,
     });
 

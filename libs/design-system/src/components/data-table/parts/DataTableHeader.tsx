@@ -1,44 +1,31 @@
-import { ForwardedRef, forwardRef, JSX } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
-import { TableHeader, TableHeaderProps } from 'react-aria-components';
 
 export const dataTableHeader = tv({
   base: 'bg-gray-50',
 });
 
-export type DataTableHeaderProps<T extends object> = VariantProps<
-  typeof dataTableHeader
-> &
-  TableHeaderProps<T>;
+export interface DataTableHeaderProps
+  extends VariantProps<typeof dataTableHeader> {
+  children?: ReactNode;
+  isRowHeader?: boolean;
+}
 
-const DataTableHeaderInternal = <T extends object>(
-  { children, ...rest }: DataTableHeaderProps<T>,
-  ref: ForwardedRef<HTMLDivElement>
-) => {
-  return (
-    <TableHeader ref={ref} className={dataTableHeader()} {...rest}>
-      {children}
-    </TableHeader>
-  );
-};
-
-type DataTableHeaderComponent = (<T extends object>(
-  props: DataTableHeaderProps<T> & {
-    ref?: ForwardedRef<HTMLDivElement>;
+const DataTableHeader = forwardRef<HTMLDivElement, DataTableHeaderProps>(
+  ({ children, isRowHeader = false, ...rest }, ref) => {
+    return (
+      <th
+        ref={ref}
+        role={isRowHeader ? 'rowheader' : undefined}
+        className={dataTableHeader()}
+        {...rest}
+      >
+        {children}
+      </th>
+    );
   }
-) => JSX.Element) & {
-  displayName?: string;
-};
-
-const DataTableHeader = forwardRef(
-  <T extends object>(
-    props: DataTableHeaderProps<T>,
-    ref: ForwardedRef<HTMLDivElement>
-  ) => {
-    return DataTableHeaderInternal<T>(props, ref);
-  }
-) as DataTableHeaderComponent;
+);
 
 DataTableHeader.displayName = 'DataTableHeader';
 

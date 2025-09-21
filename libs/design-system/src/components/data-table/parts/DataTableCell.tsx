@@ -1,28 +1,29 @@
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
-import { Cell, CellProps } from 'react-aria-components';
 
 export const dataTableCell = tv({
   base: 'p-2',
 });
 
-export interface DataTableCellProps
-  extends VariantProps<typeof dataTableCell>,
-    CellProps {
-  isRaw?: boolean;
+export interface DataTableCellProps extends VariantProps<typeof dataTableCell> {
+  children: ReactNode;
+  colSpan?: number;
+  rowSpan?: number;
 }
 
 const DataTableCell = forwardRef<HTMLDivElement, DataTableCellProps>(
-  ({ children, isRaw, ...props }, ref) => {
-    return isRaw ? (
-      <td ref={ref} className={dataTableCell()}>
+  ({ children, colSpan, rowSpan, ...props }, ref) => {
+    return (
+      <td
+        ref={ref}
+        colSpan={colSpan}
+        rowSpan={rowSpan}
+        className={dataTableCell()}
+        {...props}
+      >
         {children}
       </td>
-    ) : (
-      <Cell ref={ref} className={dataTableCell()} {...props}>
-        {children}
-      </Cell>
     );
   }
 );

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Maps } from './Maps';
+import { Coordinates, Maps } from './Maps';
 
 /**
  * Meta data for the `Maps` component.
@@ -43,10 +43,10 @@ export const WithClick: Story = {
     longitude: 5.885981,
   },
   render: function Render(args) {
-    const handleClick = (event: LeafletMouseEvent) => {
-      alert([event.latlng.lat, event.latlng.lng]);
+    const handleClick = (event: Coordinates) => {
+      console.log([event.lat, event.lon]);
     };
 
-    return <Maps {...args} click={handleClick} />;
+    return <Maps {...args} onCoordinatesChange={handleClick} />;
   },
 };

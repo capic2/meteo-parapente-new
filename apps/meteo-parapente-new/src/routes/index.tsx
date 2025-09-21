@@ -5,6 +5,7 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import {
+  dataMeteoQueryInputSchema,
   meteoSchema,
   structureMeteoResponseSchema,
 } from '@meteo-parapente-new/common-types';
@@ -37,20 +38,26 @@ const meteoOptions = (
   startDate: string,
   lat: number,
   lon: number,
-  hourRanges: string[] | undefined,
-  propertyIds: string[] | undefined
+  hourRanges?: string[],
+  propertyIds?: string[]
 ) => {
   return queryOptions({
     queryKey: ['meteo', startDate, lat, lon, hourRanges, propertyIds],
     queryFn: async () => {
+      const searchParams = dataMeteoQueryInputSchema.safeParse({
+        startDate,
+        lat,
+        lon,
+        hourRanges,
+        propertyIds,
+      });
+
+      if (searchParams.error) {
+        throw searchParams.error;
+      }
+
       const response = await ky.get(`${import.meta.env.VITE_API_URL}/meteo`, {
-        searchParams: {
-          startDate,
-          lat: String(lat),
-          lon: String(lon),
-          hourRanges: hourRanges?.join(',') ?? '',
-          propertyIds: propertyIds?.join(',') ?? '',
-        },
+        searchParams: searchParams.success && searchParams.data,
       });
       const json = await response.json();
       return meteoSchema.safeParse(json);
@@ -100,6 +107,15 @@ export function Index() {
   if (!structureData?.data) {
     return <div>No data</div>;
   }
+
+  if (meteoData?.error) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        {meteoData.error.message}
+      </div>
+    );
+  }
+
 
   const listDates = Array.from({ length: 10 }, (_, i) =>
     formatDateYYYYMMDD(new Date(new Date().setDate(new Date().getDate() + i)))
@@ -152,7 +168,11 @@ export function Index() {
           }
         />
       </h1>
-      <MeteoDataTable structure={structureData.data} meteoResponse={meteoData?.data} isLoading={isFetching} />
+      <MeteoDataTable
+        structure={structureData.data}
+        meteoResponse={meteoData?.data}
+        isLoading={isFetching}
+      />
       <Maps
         className="h-[500px]"
         latitude={lat}

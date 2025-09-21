@@ -2,12 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DataTable } from './DataTable';
 import { DataTableHeader } from './parts/DataTableHeader';
 import { DataTableRow } from './parts/DataTableRow';
-import { DataTableColumn } from './parts/DataTableColumn';
 import { DataTableBody } from './parts/DataTableBody';
 import { DataTableCell } from './parts/DataTableCell';
 import { DataTableRowHeader } from './parts/DataTableRowHeader';
-import { Row, Cell, TableHeader } from 'react-aria-components';
 import { Spinner } from '../spinner/Spinner';
+
 const meta = {
   component: DataTable,
   title: 'DataTable',
@@ -20,12 +19,12 @@ export const Primary: Story = {
   args: {},
   render: (args) => (
     <DataTable {...args}>
-      <DataTableHeader>
-        <DataTableColumn />
-        <DataTableColumn>09h - 12h</DataTableColumn>
-        <DataTableColumn>12h - 16h</DataTableColumn>
-        <DataTableColumn>16h - 19h</DataTableColumn>
-      </DataTableHeader>
+      <DataTableRow>
+        <DataTableHeader isRowHeader={true} />
+        <DataTableHeader>09h - 12h</DataTableHeader>
+        <DataTableHeader>12h - 16h</DataTableHeader>
+        <DataTableHeader>16h - 19h</DataTableHeader>
+      </DataTableRow>
       <DataTableBody>
         <DataTableRow>
           <DataTableRowHeader>Header A</DataTableRowHeader>
@@ -62,14 +61,14 @@ export const Loading: Story = {
   },
   render: (args) => (
     <DataTable {...args}>
-      <DataTableHeader>
-        <DataTableColumn />
-        <DataTableColumn>09h - 12h</DataTableColumn>
-        <DataTableColumn>12h - 16h</DataTableColumn>
-        <DataTableColumn>16h - 19h</DataTableColumn>
-      </DataTableHeader>
+      <DataTableRow>
+        <DataTableHeader isRowHeader={true} />
+        <DataTableHeader>09h - 12h</DataTableHeader>
+        <DataTableHeader>12h - 16h</DataTableHeader>
+        <DataTableHeader>16h - 19h</DataTableHeader>
+      </DataTableRow>
       <DataTableBody>
-
+        aaa
       </DataTableBody>
     </DataTable>
   ),
@@ -80,35 +79,33 @@ export const WithCustomLoading: Story = {
   args: {
     isLoading: true,
     children: [],
-    items: []
   },
   render: (args) => (
-    <DataTable isLoading={args.isLoading} items={args.items}>
-      <DataTableHeader>
-        <DataTableColumn isRowHeader={true}/>
-        <DataTableColumn>09h - 12h</DataTableColumn>
-        <DataTableColumn>12h - 16h</DataTableColumn>
-        <DataTableColumn>16h - 19h</DataTableColumn>
-      </DataTableHeader>
-      <DataTableBody renderLoadingState={
+    <DataTable isLoading={args.isLoading}>
+      <DataTableRow>
+        <DataTableHeader isRowHeader={true}/>
+        <DataTableHeader>09h - 12h</DataTableHeader>
+        <DataTableHeader>12h - 16h</DataTableHeader>
+        <DataTableHeader>16h - 19h</DataTableHeader>
+      </DataTableRow>
+      <DataTableBody renderLoadingBodyContentState={
         <>
-        <DataTableRow isRaw={true}>
-          <DataTableRowHeader isRaw={true}>property 1</DataTableRowHeader>
-          <td colSpan={999} rowSpan={999}><div
-
-            className="flex h-full items-center justify-center py-40"
-
-          >
-            <Spinner size={24} />
-          </div></td>
+          <DataTableRow>
+            <DataTableRowHeader>header 1</DataTableRowHeader>
+            <DataTableCell colSpan={999} rowSpan={999}>
+              <div className="flex flex-col justify-center py-8 items-center">
+                <Spinner />
+                This is the loading state
+              </div>
+            </DataTableCell>
+          </DataTableRow>
+        <DataTableRow>
+          <DataTableRowHeader>header 2</DataTableRowHeader>
         </DataTableRow>
-        <tr>
-          <th>property 2</th>
-        </tr>
-        <tr>
-          <th>property 3</th>
-        </tr>
-</>
+        <DataTableRow>
+          <DataTableRowHeader>header 3</DataTableRowHeader>
+        </DataTableRow>
+          </>
         }>
         {args.children}
       </DataTableBody>

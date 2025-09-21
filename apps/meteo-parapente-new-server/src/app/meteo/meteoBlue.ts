@@ -1,9 +1,9 @@
 import ky from 'ky';
 import { z } from 'zod';
-import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc';
-import { MeteoStandardProviderStructure } from '../../types';
-import { logger } from '../utils/logger';
-import { allSettledWithIds } from '../utils/promise';
+import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc.js';
+import { MeteoStandardProviderStructure } from '../../types.js';
+import { logger } from '../utils/logger.js';
+import { allSettledWithIds } from '../utils/promise.js';
 
 const meteoBlueBasic1hDaySchema = z
   .object({
@@ -303,6 +303,8 @@ export const getMeteoBlueData = async ({
   hourRanges: string[];
   date: Date;
 }) => {
+  logger.info({ file: 'meteoBlue', function: 'getMeteoBlueData' }, `latitude: ${latitude}, longitude: ${longitude}, hourRanges: ${hourRanges}, date: ${date}`);
+
   const windPromise = getMeteoBlueWindData(latitude, longitude, hourRanges);
   const basicPromise = getMeteoBlueBasicData(latitude, longitude, hourRanges);
 

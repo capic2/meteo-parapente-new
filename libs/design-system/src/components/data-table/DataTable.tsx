@@ -1,39 +1,26 @@
-import {
-  ResizableTableContainer,
-  Table,
-  TableBodyProps,
-  TableHeaderProps,
-  TableProps,
-} from 'react-aria-components';
 import { tv, VariantProps } from 'tailwind-variants';
 import { DataTableProvider } from './DataTable.context';
+import { ReactNode } from 'react';
 
 export const dataTable = tv({
   base: 'min-w-full divide-y divide-gray-200',
 });
 
-export interface DataTableProps<T extends object>
-  extends VariantProps<typeof dataTable>,
-    TableProps {
+export interface DataTableProps extends VariantProps<typeof dataTable> {
   isLoading?: boolean;
-  columns?: TableHeaderProps<T>['columns'];
-  items?: TableBodyProps<T>['items'];
+  children: ReactNode;
 }
 
-const DataTable = <T extends object>({
+const DataTable = ({
   children,
   isLoading = false,
-  columns,
-  items,
   ...rest
-}: DataTableProps<T>) => {
+}: DataTableProps) => {
   return (
     <DataTableProvider isLoading={isLoading}>
-      <ResizableTableContainer>
-        <Table className={dataTable()} {...rest}>
-          {children}
-        </Table>
-      </ResizableTableContainer>
+      <table className={dataTable()} {...rest}>
+        {children}
+      </table>
     </DataTableProvider>
   );
 };

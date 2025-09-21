@@ -15,7 +15,7 @@ describe('registerComponent', () => {
       '/lib/design-system/project.json',
       `
      {
-        "name": "design-system",
+        "name": "@meteo-parapente-new/design-system",
         "$schema": "../../node_modules/nx/schemas/nx-schema.json",
         "projectType": "library",
         "sourceRoot": "lib/design-system/src",
@@ -48,7 +48,7 @@ describe('registerComponent', () => {
       "
           export * from './test/Test'
           
-      export * from './my-component/MyComponent'"
+      export * from './components/my-component/MyComponent'"
     `)
   })
 })

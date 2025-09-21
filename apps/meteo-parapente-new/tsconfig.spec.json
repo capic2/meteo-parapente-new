@@ -29,8 +29,8 @@
     "src/**/*.test.jsx",
     "src/**/*.spec.jsx",
     "src/**/*.d.ts",
-    "src/**/*.mock.ts",
-    "src/**/*.mock.json"
+    "mocks/**/*.*.ts",
+    "mocks/**/*.*.json"
   ],
   "references": [
     {

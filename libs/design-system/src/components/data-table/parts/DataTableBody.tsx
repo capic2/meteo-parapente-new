@@ -1,55 +1,30 @@
-import { ForwardedRef, forwardRef, JSX } from 'react';
-import { TableBody, TableBodyProps } from 'react-aria-components';
-import { DataTableRowProps } from './DataTableRow';
+import { forwardRef, JSX, ReactElement, ReactNode } from 'react';
 import { DataTableBodyLoading } from './DataTableBodyLoading';
 import { useDataTableContext } from '../DataTable.context';
 
-export interface DataTableBodyProps<T extends object>
-  extends Omit<TableBodyProps<T>, 'renderEmptyState'> {
-  renderEmptyState?: JSX.Element;
-  renderLoadingState?: JSX.Element;
+export interface DataTableBodyProps {
+  renderEmptyBodyContentState?: JSX.Element;
+  renderLoadingBodyContentState?: ReactElement | ReactElement[];
+  children: ReactNode;
 }
 
-const DataTableBodyInternal = <T extends object>(
-  {
-    children,
-    renderEmptyState,
-    renderLoadingState,
-    ...rest
-  }: DataTableBodyProps<T>,
-  ref: ForwardedRef<HTMLDivElement>
-) => {
-  const { isLoading } = useDataTableContext();
+const DataTableBody = forwardRef<HTMLDivElement, DataTableBodyProps>(
+  ({ children, renderEmptyBodyContentState, renderLoadingBodyContentState, ...rest }, ref) => {
+    const { isLoading } = useDataTableContext();
 
-    const LoadingState = renderLoadingState ? (
-      renderLoadingState
+    const LoadingState = renderLoadingBodyContentState ? (
+      renderLoadingBodyContentState
     ) : (
       <DataTableBodyLoading />
     );
 
-  return (
-    <TableBody ref={ref} {...rest}>
-      {isLoading ? LoadingState : children}
-    </TableBody>
-  );
-};
-
-type DataTableRowComponent = (<T extends object>(
-  props: DataTableRowProps<T> & {
-    ref?: ForwardedRef<HTMLDivElement>;
+    return (
+      <tbody ref={ref} {...rest}>
+        {isLoading ? LoadingState : children}
+      </tbody>
+    );
   }
-) => JSX.Element) & {
-  displayName?: string;
-};
-
-const DataTableBody = forwardRef(
-  <T extends object>(
-    props: DataTableBodyProps<T>,
-    ref: ForwardedRef<HTMLDivElement>
-  ) => {
-    return DataTableBodyInternal<T>(props, ref);
-  }
-) as DataTableRowComponent;
+);
 
 DataTableBody.displayName = 'DataTableBody';
 

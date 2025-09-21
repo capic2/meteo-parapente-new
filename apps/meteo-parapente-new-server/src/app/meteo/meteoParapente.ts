@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import ky from 'ky';
-import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc';
-import { MeteoStandardProviderStructure } from '../../types';
-import { logger } from '../utils/logger';
+import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc.js';
+import { MeteoStandardProviderStructure } from '../../types.js';
+import { logger } from '../utils/logger.js';
 
 const meteoParapenteStatySchema = z.object({
   france: z.array(
@@ -112,6 +112,10 @@ const getMeteoParapenteDataForOneDay = async (
   lon: number,
   hourRanges: string[]
 ) => {
+  logger.info(
+    { file: 'meteoParapente', function: 'getMeteoParapenteDataForOneDay' },
+    `initValue: ${initValue}, date: ${date}, lat: ${lat}, lon: ${lon}, hourRanges: ${hourRanges}`
+  );
   const url = `https://data0.meteo-parapente.com/data.php?run=${initValue}&location=${lat},${lon}&date=${date}&plot=windgram`;
   logger.info(
     { file: 'meteoParapente', function: 'getMeteoParapenteDataForOneDay' },

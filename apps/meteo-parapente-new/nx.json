@@ -5,7 +5,30 @@
   "projectType": "application",
   "targets": {
     "storybook": {
-      "dependsOn": ["^build" , "build"]
+      "dependsOn": ["^build", "build"]
+    },
+    "chromatic": {
+      "dependsOn": ["storybook-build"],
+      "command": "CHROMATIC_PROJECT_TOKEN=\"chpt_3c8b46fe8647aad\" npx chromatic@latest --storybook-build-dir=storybook-static --only-changed --externals \".storybook/**/*\"",
+      "cache": true,
+      "inputs": [
+        "default",
+        "^production",
+        {
+          "externalDependencies": [
+            "chromatic",
+            "storybook"
+          ]
+        }
+      ],
+      "metadata": {
+        "description": "Run chromatic on your storybook",
+        "technologies": ["storybook"]
+      },
+      "options": {
+        "cwd": "{projectRoot}"
+      },
+      "parallelism": false
     }
   }
 }

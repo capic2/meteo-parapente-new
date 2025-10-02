@@ -4,8 +4,8 @@
     "outDir": "out-tsc/storybook",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "lib": ["dom"],
   },
   "exclude": [
     "src/**/*.spec.ts",

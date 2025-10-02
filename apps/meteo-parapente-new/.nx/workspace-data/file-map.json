@@ -1,0 +1,155 @@
+{
+  "version": "6.0",
+  "nxVersion": "21.4.1",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": "src/routes-stories/index.stories.tsx",
+        "hash": "11537988446467093463"
+      },
+      {
+        "file": "mocks/meteo.json",
+        "hash": "1347212756494010993"
+      },
+      {
+        "file": "src/main.tsx",
+        "hash": "3968196001669534554"
+      },
+      {
+        "file": "public/favicon.ico",
+        "hash": "9303420814833116677"
+      },
+      {
+        "file": "src/routes/index.tsx",
+        "hash": "18145569050736525550"
+      },
+      {
+        "file": "tsconfig.app.json",
+        "hash": "13242684796233314183"
+      },
+      {
+        "file": "src/routes/__root.tsx",
+        "hash": "11697776977257635734"
+      },
+      {
+        "file": "mocks/structure.json",
+        "hash": "15774425384510092956"
+      },
+      {
+        "file": "i18n/fr-FR.json",
+        "hash": "13268294465274299057"
+      },
+      {
+        "file": "src/components/meteo-data-table/parts/MeteoDataTableCell.tsx",
+        "hash": "9307044052996750879"
+      },
+      {
+        "file": "tsconfig.spec.json",
+        "hash": "1777046883799487445"
+      },
+      {
+        "file": ".nx/workspace-data/file-map.json",
+        "hash": "8807209199627699175"
+      },
+      {
+        "file": "index.html",
+        "hash": "17489429749025456858"
+      },
+      {
+        "file": ".nx/workspace-data/source-maps.json",
+        "hash": "1389868326933519382"
+      },
+      {
+        "file": "src/routeTree.gen.ts",
+        "hash": "6183454734241100652"
+      },
+      {
+        "file": "package.json",
+        "hash": "17602695278756883654"
+      },
+      {
+        "file": ".nx/workspace-data/project-graph.json",
+        "hash": "15169081598015016569"
+      },
+      {
+        "file": "src/components/meteo-data-table/parts/MeteoDataTableRowHeader.tsx",
+        "hash": "5315596310104866845"
+      },
+      {
+        "file": ".nx/workspace-data/d/daemon.log",
+        "hash": "13499955483242934515"
+      },
+      {
+        "file": "src/styles.css",
+        "hash": "3090283565995925760"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "16872210842335832055"
+      },
+      {
+        "file": "src/components/meteo-data-table/buildContent.ts",
+        "hash": "10344945903950262705"
+      },
+      {
+        "file": "src/components/meteo-data-table/MeteoDataTable.tsx",
+        "hash": "483449276254613892"
+      },
+      {
+        "file": "src/routes/settings.tsx",
+        "hash": "6344190957720115593"
+      },
+      {
+        "file": ".storybook/preview.tsx",
+        "hash": "14776173871263243301"
+      },
+      {
+        "file": "public/mockServiceWorker.js",
+        "hash": "8905338003552792049"
+      },
+      {
+        "file": "tsconfig.storybook.json",
+        "hash": "16303414603750063479"
+      },
+      {
+        "file": "eslint.config.mjs",
+        "hash": "8789163670399984295"
+      },
+      {
+        "file": "src/components/meteo-data-table/buildContent.test.ts",
+        "hash": "3546438155744739489"
+      },
+      {
+        "file": "src/assets/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/utils/misc.test.ts",
+        "hash": "3843045568423184455"
+      },
+      {
+        "file": "src/utils/misc.ts",
+        "hash": "9078051719605425685"
+      },
+      {
+        "file": "vite.config.ts",
+        "hash": "940584485085230634"
+      },
+      {
+        "file": "nx.json",
+        "hash": "3332014915233346367"
+      },
+      {
+        "file": "src/components/meteo-data-table/MeteoDatatable.stories.tsx",
+        "hash": "16830262351264886094"
+      },
+      {
+        "file": ".storybook/main.ts",
+        "hash": "12884850056978404283"
+      }
+    ],
+    "projectFileMap": {}
+  }
+}

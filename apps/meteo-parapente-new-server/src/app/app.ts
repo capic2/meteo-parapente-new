@@ -14,15 +14,16 @@ export async function app(fastify: FastifyInstance/*, opts: AppOptions*/) {
   // those should be support plugins that are reused
   // through your application
   fastify.register(AutoLoad, {
-
-    dir: path.join(import.meta.dirname, 'app/plugins'),
+    /* eslint-disable-next-line */
+    dir: path.join(__dirname, 'plugins'),
     options: {/* ...opts */},
   });
 
   // This loads all plugins defined in routes
   // define your routes in one of these
   fastify.register(AutoLoad, {
-    dir: path.join(import.meta.dirname, 'app/routes'),
+    /* eslint-disable-next-line */
+    dir: path.join(__dirname, 'routes'),
     options: {/* ...opts */},
   });
 }

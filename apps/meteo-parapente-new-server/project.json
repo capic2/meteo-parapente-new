@@ -10,22 +10,58 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "main": "apps/meteo-parapente-new-server/src/main.ts",
-        "outputPath": "apps/meteo-parapente-new-server/dist",
-        "outputFileName": "main.js",
-        "tsConfig": "apps/meteo-parapente-new-server/tsconfig.app.json",
         "platform": "node",
-        "format": ["esm"],
-        "declarationRootDir": "apps/meteo-parapente-new-server/src"
+        "outputPath": "apps/meteo-parapente-new-server/dist",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/meteo-parapente-new-server/src/main.ts",
+        "tsConfig": "apps/meteo-parapente-new-server/tsconfig.app.json",
+        "assets": ["apps/meteo-parapente-new-server/src/assets"],
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
       },
       "configurations": {
-        "development": {
-          "minify": false
-        },
+        "development": {},
         "production": {
-          "minify": true
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
         }
       }
+    },
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/apps/meteo-parapente-new-server/dist/package.json",
+        "{workspaceRoot}/apps/meteo-parapente-new-server/dist/package-lock.json"
+      ],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": [
+        "{workspaceRoot}/apps/meteo-parapente-new-server/dist/workspace_modules"
+      ],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
     },
     "serve": {
       "continuous": true,

@@ -2,7 +2,6 @@
   "name": "@meteo-parapente-new/meteo-parapente-new-server",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
   "dependencies": {
     "fastify": "~5.6.0",
     "fastify-plugin": "~5.0.1",

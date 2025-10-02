@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
 import tailwindcss from '@tailwindcss/vite';
+import storybookTest from '@storybook/addon-vitest/vitest-plugin';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
@@ -55,5 +56,31 @@ export default defineConfig(() => ({
       provider: 'v8' as const,
     },
     passWithNoTests: true,
+    projects: [
+      {
+        extends: true,
+        plugins: [
+          storybookTest({
+            // The location of your Storybook config, main.js|ts
+            configDir: path.join(import.meta.dirname, '.storybook'),
+            // This should match your package.json script to run Storybook
+            // The --ci flag will skip prompts and not open a browser
+            storybookScript: 'yarn storybook --ci',
+          }),
+        ],
+        test: {
+          name: 'storybook',
+          // Enable browser mode
+          browser: {
+            enabled: true,
+            // Make sure to install Playwright
+            provider: 'playwright',
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+          },
+          setupFiles: ['./.storybook/vitest.setup.ts'],
+        },
+      }
+    ]
   },
 }));

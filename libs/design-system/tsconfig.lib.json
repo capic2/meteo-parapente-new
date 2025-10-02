@@ -3,6 +3,7 @@
   "compilerOptions": {
     "moduleResolution": "bundler",
     "outDir": "dist",
+    "lib": ["dom"],
     "types": [
       "node",
       "@nx/react/typings/cssmodule.d.ts",

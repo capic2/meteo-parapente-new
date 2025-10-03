@@ -10,6 +10,7 @@ export default defineConfig(() => ({
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
+      insertTypesEntry: true,
     }),
   ],
   // Uncomment this if you are using workers.
@@ -32,12 +33,20 @@ export default defineConfig(() => ({
       fileName: 'index',
       // Change this to the formats you want to support.
       // Don't forget to update your package.json as well.
-      formats: ['es' as const, 'cjs' as const],
+      formats: ['es' as const],
     },
     rollupOptions: {
-      // External packages that should not be bundled into your library.
-      external: [],
+      external: [
+        // ✅ Externalisez toutes les dépendances Node.js
+        'drizzle-orm',
+        'postgres',
+        '@planetscale/database',
+        'mysql2',
+        'pg',
+        /^node:/, // Modules Node.js natifs
+      ],
     },
+    target: 'node18',
   },
   test: {
     name: '@meteo-parapente-new/database',

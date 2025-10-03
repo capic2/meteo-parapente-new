@@ -12,11 +12,19 @@
       "options": {
         "main": "apps/meteo-parapente-new-server/src/main.ts",
         "outputPath": "apps/meteo-parapente-new-server/dist",
-        "outputFileName": "main.js",
-        "tsConfig": "apps/meteo-parapente-new-server/tsconfig.app.json",
-        "platform": "node",
         "format": ["esm"],
-        "declarationRootDir": "apps/meteo-parapente-new-server/src"
+        "platform": "node",
+        "target": "node18",
+        "outputFileName": "main.js",
+        "bundle": true,
+        "tsConfig": "apps/meteo-parapente-new-server/tsconfig.app.json",
+        "declarationRootDir": "apps/meteo-parapente-new-server/src",
+        "external": [
+          "dotenv",           // ✅ Externaliser dotenv
+          "dotenv/config",
+          "@dotenv-run/core",
+          "config"
+        ]
       },
       "configurations": {
         "development": {

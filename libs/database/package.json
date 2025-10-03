@@ -1,5 +1,5 @@
 {
-  "name": "@meteo-parapente-new/nx-tools",
+  "name": "@meteo-parapente-new/database",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -9,20 +9,12 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
+      "require": "./dist/index.cjs",
       "@meteo-parapente-new/source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
   },
-  "dependencies": {
-    "@nx/devkit": "21.4.1",
-    "tslib": "^2.3.0"
-  },
-  "generators": "./generators.json",
-  "files": [
-    "dist",
-    "!**/*.tsbuildinfo",
-    "generators.json"
-  ]
+  "dependencies": {}
 }

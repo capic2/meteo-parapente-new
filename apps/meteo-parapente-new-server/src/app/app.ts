@@ -14,7 +14,6 @@ export async function app(fastify: FastifyInstance/*, opts: AppOptions*/) {
   // those should be support plugins that are reused
   // through your application
   fastify.register(AutoLoad, {
-
     dir: path.join(import.meta.dirname, 'app/plugins'),
     options: {/* ...opts */},
   });

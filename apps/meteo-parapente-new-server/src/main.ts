@@ -4,12 +4,16 @@ import { pinoConfig } from './app/utils/logger';
 import cors from '@fastify/cors';
 //@ts-expect-error no types
 import fastifyListRoutes from 'fastify-list-routes';
-import { populateDb } from '@meteo-parapente-new/database';
+import { connect } from '@meteo-parapente-new/database';
+import { config } from '@dotenvx/dotenvx';
+
+config({ path: '.env' });
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
-populateDb();
+const { db } = await connect({ path: process.env.DB_FILE_NAME! });
+export { db };
 
 // Instantiate Fastify with some config
 const server = Fastify({

@@ -43,6 +43,12 @@ export default defineConfig(() => ({
         '@planetscale/database',
         'mysql2',
         'pg',
+        'libsql',
+        '^@libsql\//',
+        '@neon-rs/load',
+        'detect-libc',
+        'better-sqlite3',
+        'drizzle-orm',
         /^node:/, // Modules Node.js natifs
       ],
     },

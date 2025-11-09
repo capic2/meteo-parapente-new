@@ -1,14 +1,14 @@
-import { createClient } from '@libsql/client';
-import { drizzle } from 'drizzle-orm/libsql';
+import { BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3';
+import Database from 'better-sqlite3';
 import { providerTable } from './schema';
-import 'dotenv/config';
 
-const client = createClient({
-  url: import.meta.url + process.env.DB_FILE_NAME,
-});
-export const db = drizzle({ client });
+const populateDb = async (db: BetterSQLite3Database) => {
+  if ((await db.$count(providerTable)) > 0) {
+    await populateProviders(db);
+  }
+};
 
-const populateProviders = async () => {
+const populateProviders = async (db: BetterSQLite3Database) => {
   await db.insert(providerTable).values({
     key: 'meteo-blue',
     name: 'Meteo Blue',
@@ -23,8 +23,11 @@ const populateProviders = async () => {
   });
 };
 
-export const populateDb = async () => {
-  if ((await db.select().from(providerTable).all()).length === 0) {
-    await populateProviders();
-  }
+export const connect = async ({ path }: { path: string }) => {
+  const sqlite = new Database(path);
+  const db = drizzle(sqlite);
+
+  await populateDb(db);
+
+  return { db };
 };

@@ -3,14 +3,15 @@ import { getMeteoBlueData } from '../meteo/meteoBlue.js';
 import {
   DataMeteoQueryInputType,
   MeteoType,
-  SettingsResponseType,
+  //SettingsResponseType,
   StructureMeteoResponseType,
 } from '@meteo-parapente-new/common-types';
 import { getMeteoParapenteData } from '../meteo/meteoParapente.js';
 import { allSettledWithIds } from '../utils/promise.js';
 import { MeteoStandardProviderStructure } from '../../types.js';
 import 'dotenv/config';
-import { db, providerTable } from '@meteo-parapente-new/database';
+/*import { providerTable } from '@meteo-parapente-new/database';
+import { db } from '../../main';*/
 
 type BaseProperty = {
   id: string;
@@ -292,11 +293,11 @@ export default async function (fastify: FastifyInstance) {
     return meteoResponse;
   });
 
-  fastify.get<{ Reply: SettingsResponseType }>('/settings', async function () {
-    const providers = await db.select().from(providerTable).all();
+  /*fastify.get<{ Reply: SettingsResponseType }>('/settings', async function () {
+    const providers = db.select().from(providerTable).all();
 
     return {
       providers,
     };
-  });
+  });*/
 }

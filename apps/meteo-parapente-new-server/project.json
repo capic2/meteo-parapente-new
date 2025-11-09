@@ -14,16 +14,18 @@
         "outputPath": "apps/meteo-parapente-new-server/dist",
         "format": ["esm"],
         "platform": "node",
-        "target": "node18",
+        "target": "node20",
         "outputFileName": "main.js",
         "bundle": true,
         "tsConfig": "apps/meteo-parapente-new-server/tsconfig.app.json",
         "declarationRootDir": "apps/meteo-parapente-new-server/src",
         "external": [
-          "dotenv",           // ✅ Externaliser dotenv
-          "dotenv/config",
-          "@dotenv-run/core",
-          "config"
+          "config",
+          "better-sqlite3",
+          "drizzle-orm",
+          "node:fs",
+          "node:path",
+          "node:module"
         ]
       },
       "configurations": {

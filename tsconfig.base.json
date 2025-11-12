@@ -17,5 +17,10 @@
     "strict": true,
     "target": "es2022",
     "customConditions": ["@meteo-parapente-new/source"]
+    "customConditions": ["development"],
+    "baseUrl": ".",
+    "paths": {
+      "@meteo-parapente-new/*": ["libs/*/src", "apps/*/src"]
+    }
   }
 }

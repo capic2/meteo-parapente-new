@@ -8,6 +8,9 @@
     "moduleResolution": "bundler",
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "resolveJsonModule": true,
+    "declaration": true,
+    "sourceMap": true,
+    "declarationMap": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["eslint.config.js", "eslint.config.cjs", "eslint.config.mjs"],

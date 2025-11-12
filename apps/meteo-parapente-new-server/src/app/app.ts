@@ -14,15 +14,17 @@ export async function app(fastify: FastifyInstance/*, opts: AppOptions*/) {
   // those should be support plugins that are reused
   // through your application
   fastify.register(AutoLoad, {
-
-    dir: path.join(import.meta.dirname, 'app/plugins'),
+    // In ESM, import.meta.dirname points to dist/src/app at runtime.
+    // Plugins live in dist/src/app/plugins, so do not prefix with 'app/'.
+    dir: path.join(import.meta.dirname, 'plugins'),
     options: {/* ...opts */},
   });
 
   // This loads all plugins defined in routes
   // define your routes in one of these
   fastify.register(AutoLoad, {
-    dir: path.join(import.meta.dirname, 'app/routes'),
+    // Routes live in dist/src/app/routes
+    dir: path.join(import.meta.dirname, 'routes'),
     options: {/* ...opts */},
   });
 }

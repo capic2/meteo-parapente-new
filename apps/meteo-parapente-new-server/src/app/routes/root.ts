@@ -1,17 +1,18 @@
 import { FastifyInstance } from 'fastify';
-import { getMeteoBlueData } from '../meteo/meteoBlue.js';
+import { getMeteoBlueData } from '../meteo/meteoBlue';
 import {
   DataMeteoQueryInputType,
   MeteoType,
-  //SettingsResponseType,
+  SettingsResponseType,
   StructureMeteoResponseType,
 } from '@meteo-parapente-new/common-types';
-import { getMeteoParapenteData } from '../meteo/meteoParapente.js';
-import { allSettledWithIds } from '../utils/promise.js';
-import { MeteoStandardProviderStructure } from '../../types.js';
+import { getMeteoParapenteData } from '../meteo/meteoParapente';
+import { allSettledWithIds } from '../utils/promise';
+import { MeteoStandardProviderStructure } from '../../types';
 import 'dotenv/config';
-/*import { providerTable } from '@meteo-parapente-new/database';
-import { db } from '../../main';*/
+import { providerTable } from '@meteo-parapente-new/database';
+import { db } from '../../main';
+
 
 type BaseProperty = {
   id: string;
@@ -293,11 +294,11 @@ export default async function (fastify: FastifyInstance) {
     return meteoResponse;
   });
 
-  /*fastify.get<{ Reply: SettingsResponseType }>('/settings', async function () {
+  fastify.get<{ Reply: SettingsResponseType }>('/settings', async function () {
     const providers = db.select().from(providerTable).all();
 
     return {
       providers,
     };
-  });*/
+  });
 }

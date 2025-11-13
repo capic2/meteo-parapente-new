@@ -3,7 +3,7 @@ import Database from 'better-sqlite3';
 import { providerTable } from './schema';
 
 const populateDb = async (db: BetterSQLite3Database) => {
-  if ((await db.$count(providerTable)) > 0) {
+  if ((await db.$count(providerTable)) === 0) {
     await populateProviders(db);
   }
 };

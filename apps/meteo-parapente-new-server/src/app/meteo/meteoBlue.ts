@@ -1,9 +1,9 @@
 import ky from 'ky';
 import { z } from 'zod';
-import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc.js';
-import { MeteoStandardProviderStructure } from '../../types.js';
-import { logger } from '../utils/logger.js';
-import { allSettledWithIds } from '../utils/promise.js';
+import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc';
+import { MeteoStandardProviderStructure } from '../../types';
+import { logger } from '../utils/logger';
+import { allSettledWithIds } from '../utils/promise';
 
 const meteoBlueBasic1hDaySchema = z
   .object({

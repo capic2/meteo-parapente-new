@@ -17,6 +17,9 @@
     },
     {
       "path": "./libs/common-types"
+    },
+    {
+      "path": "./libs/database"
     }
   ],
   "ts-node": {

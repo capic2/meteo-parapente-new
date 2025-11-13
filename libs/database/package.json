@@ -1,6 +1,7 @@
 {
-  "name": "@meteo-parapente-new/design-system",
+  "name": "@meteo-parapente-new/database",
   "version": "0.0.1",
+  "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -8,19 +9,12 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
+      "require": "./dist/index.cjs",
       "@meteo-parapente-new/source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    },
-    "./i18n/*.json": "./i18n/*.json"
+    }
   },
-  "dependencies": {
-    "dotenv": "^17.2.3",
-    "drizzle-orm": "^0.44.6"
-  },
-  "devDependencies": {
-    "drizzle-kit": "^0.31.5",
-    "tsx": "^4.20.6"
-  }
+  "dependencies": {}
 }

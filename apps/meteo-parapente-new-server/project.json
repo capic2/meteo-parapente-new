@@ -17,7 +17,24 @@
           { "command": "tsc-alias -p tsconfig.app.json" },
           { "command": "node ../../tools/fix-esm-extensions.mjs dist" },
           { "command": "node ../../tools/move-dist-src-up.mjs dist" }
-        ]
+        ]/*
+        "main": "apps/meteo-parapente-new-server/src/main.ts",
+        "outputPath": "apps/meteo-parapente-new-server/dist",
+        "format": ["esm"],
+        "platform": "node",
+        "target": "node20",
+        "outputFileName": "main.js",
+        "bundle": true,
+        "tsConfig": "apps/meteo-parapente-new-server/tsconfig.app.json",
+        "declarationRootDir": "apps/meteo-parapente-new-server/src",
+        "external": [
+          "config",
+          "better-sqlite3",
+          "drizzle-orm",
+          "node:fs",
+          "node:path",
+          "node:module"
+        ]*/
       },
       "configurations": {
         "development": {},

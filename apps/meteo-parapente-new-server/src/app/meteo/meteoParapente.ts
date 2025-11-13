@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import ky from 'ky';
-import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc.js';
-import { MeteoStandardProviderStructure } from '../../types.js';
-import { logger } from '../utils/logger.js';
+import { degToCardinal8, formatDateYYYYMMDD } from '../utils/misc';
+import { MeteoStandardProviderStructure } from '../../types';
+import { logger } from '../utils/logger';
 
 const meteoParapenteStatySchema = z.object({
   france: z.array(

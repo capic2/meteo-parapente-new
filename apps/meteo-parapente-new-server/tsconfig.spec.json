@@ -9,9 +9,10 @@
       "vite/client",
       "node",
       "vitest"
-    ]
+    ],
   },
   "include": [
+    "mocks/**/*.ts",
     "vitest.config.ts",
     "vite.config.mts",
     "vitest.config.ts",
@@ -28,5 +29,13 @@
     "src/**/*.ts",
     "mocks/**/*.ts",
     "mocks/**/*.json"
+  ],
+  "references": [
+    {
+      "path": "../../libs/database"
+    },
+    {
+      "path": "../../libs/common-types"
+    }
   ]
 }

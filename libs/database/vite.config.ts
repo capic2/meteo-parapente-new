@@ -4,12 +4,12 @@ import dts from 'vite-plugin-dts';
 import * as path from 'path';
 
 export default defineConfig(() => ({
-  root: __dirname,
+  root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/libs/database',
   plugins: [
     dts({
       entryRoot: 'src',
-      tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
+      tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
       insertTypesEntry: true,
     }),
   ],
@@ -28,9 +28,11 @@ export default defineConfig(() => ({
     },
     lib: {
       // Could also be a dictionary or array of multiple entry points.
-      entry: 'src/index.ts',
+      entry: {
+        index: 'src/index.ts',
+        'index.test-utils': 'src/index.test-utils.ts',
+      },
       name: '@meteo-parapente-new/database',
-      fileName: 'index',
       // Change this to the formats you want to support.
       // Don't forget to update your package.json as well.
       formats: ['es' as const],
@@ -44,15 +46,17 @@ export default defineConfig(() => ({
         'mysql2',
         'pg',
         'libsql',
-        '^@libsql\//',
+        '^@libsql//',
         '@neon-rs/load',
         'detect-libc',
         'better-sqlite3',
         'drizzle-orm',
         /^node:/, // Modules Node.js natifs
+        'fs',
+        'path',
       ],
     },
-    target: 'node18',
+    target: 'node20',
   },
   test: {
     name: '@meteo-parapente-new/database',

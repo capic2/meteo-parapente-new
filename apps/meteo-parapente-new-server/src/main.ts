@@ -1,19 +1,20 @@
 import Fastify from 'fastify';
-import { app } from './app/app';
 import { pinoConfig } from './app/utils/logger';
 import cors from '@fastify/cors';
 //@ts-expect-error no types
 import fastifyListRoutes from 'fastify-list-routes';
-import { connect } from '@meteo-parapente-new/database';
 import { config } from '@dotenvx/dotenvx';
+import { makeApp } from './app/app';
+import { connect } from '@meteo-parapente-new/database';
 
 config({ path: '.env' });
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const { db } = await connect({ path: process.env.DB_FILE_NAME! });
-export { db };
+const app = await makeApp(db);
 
 // Instantiate Fastify with some config
 const server = Fastify({

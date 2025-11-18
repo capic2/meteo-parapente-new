@@ -2,7 +2,7 @@ import { BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
 import { providerTable } from './schema';
 
-const populateDb = async (db: BetterSQLite3Database) => {
+export const populateDb = async (db: BetterSQLite3Database) => {
   if ((await db.$count(providerTable)) === 0) {
     await populateProviders(db);
   }

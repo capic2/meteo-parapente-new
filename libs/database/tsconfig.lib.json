@@ -9,7 +9,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "forceConsistentCasingInFileNames": true,
-    "types": ["node", "vite/client"]
+    "types": ["node", "vite/client", "better-sqlite3"]
   },
   "include": ["src/**/*.ts"],
   "references": [],

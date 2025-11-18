@@ -316,10 +316,10 @@ export const getMeteoBlueData = async ({
   const windData = results.find((result) => result.id === 'wind')?.value;
   const basicData = results.find((result) => result.id === 'basic')?.value;
 
-  logger.info(
+  /*logger.info(
     { file: 'meteoBlue', function: 'getMeteoBlueData' },
     `windData: ${JSON.stringify(windData, null, 2)}`
-  );
+  );*/
 
   logger.info(
     { file: 'meteoBlue', function: 'getMeteoBlueData' },

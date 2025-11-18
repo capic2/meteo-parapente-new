@@ -1,22 +1,33 @@
 import {
   MeteoType,
+  SettingsResponseType,
   StructureMeteoResponseType,
 } from '@meteo-parapente-new/common-types';
-import { app } from './app/app';
 import Fastify from 'fastify';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { pinoConfig } from './app/utils/logger';
+import {
+  closeTestDatabase,
+  createTestDatabase,
+} from '@meteo-parapente-new/database/test-utils';
+import { makeApp } from './app/app';
 
-describe('main', () => {
+describe('main', async () => {
   const server = Fastify({
     logger: pinoConfig,
   });
+  const { sqlite, db } = await createTestDatabase();
+  const app = await makeApp(db);
 
   beforeAll(async () => {
     server.register(app);
     await server.listen();
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2025-08-19 00:00:00 GMT+2'));
+  });
+
+  afterAll(() => {
+    closeTestDatabase(sqlite);
   });
 
   afterAll(() => {
@@ -214,6 +225,44 @@ describe('main', () => {
       };
 
       expect((await response).json()).toStrictEqual(expected);
+    });
+  });
+
+  describe('/settings', () => {
+
+    it('returns 200', async () => {
+      const response = await server.inject({
+        method: 'GET',
+        url: '/settings',
+      });
+
+      expect(response.statusCode).toBe(200);
+    });
+
+    it('returns data', async () => {
+      const response = await server.inject({
+        method: 'GET',
+        url: '/settings',
+      });
+
+      const expected: SettingsResponseType = {
+        providers: [
+          {
+            key: 'meteo-blue',
+            name: 'Meteo Blue',
+          },
+          {
+            key: 'meteo-parapente',
+            name: 'Meteo Parapente',
+          },
+          {
+            key: 'meteo-ciel',
+            name: 'Meteo Ciel',
+          },
+        ],
+      };
+
+      expect(response.json()).toStrictEqual(expected);
     });
   });
 });

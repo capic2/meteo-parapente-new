@@ -11,8 +11,6 @@ import { allSettledWithIds } from '../utils/promise';
 import { MeteoStandardProviderStructure } from '../../types';
 import 'dotenv/config';
 import { providerTable } from '@meteo-parapente-new/database';
-import { db } from '../../main';
-
 
 type BaseProperty = {
   id: string;
@@ -295,7 +293,7 @@ export default async function (fastify: FastifyInstance) {
   });
 
   fastify.get<{ Reply: SettingsResponseType }>('/settings', async function () {
-    const providers = db.select().from(providerTable).all();
+    const providers = fastify.db.select().from(providerTable).all();
 
     return {
       providers,

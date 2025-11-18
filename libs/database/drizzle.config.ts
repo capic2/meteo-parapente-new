@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import 'dotenvx/config';
 import { defineConfig } from 'drizzle-kit';
 import { workspaceRoot } from '@nx/devkit';
 

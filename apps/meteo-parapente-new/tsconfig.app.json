@@ -26,6 +26,8 @@
     "src/**/*.test.js",
     "src/**/*.spec.jsx",
     "src/**/*.test.jsx",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
     "vite.config.ts",
     "vite.config.mts",
     "vitest.config.ts",
@@ -36,7 +38,8 @@
     "**/*.stories.ts",
     "**/*.stories.js",
     "**/*.stories.jsx",
-    "**/*.stories.tsx"
+    "**/*.stories.tsx",
+    "mocks/**/*.json",
   ],
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [

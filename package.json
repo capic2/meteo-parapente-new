@@ -92,7 +92,7 @@
     "jiti": "2.5.1",
     "jsdom": "22.1.0",
     "jsonc-eslint-parser": "2.4.0",
-    "msw": "2.11.1",
+    "msw": "2.12.7",
     "nx": "22.0.2",
     "postcss": "8.5.6",
     "prettier": "2.6.2",

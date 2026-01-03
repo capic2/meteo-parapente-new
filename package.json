@@ -73,7 +73,7 @@
     "@types/node": "20.19.13",
     "@types/react": "19.1.12",
     "@types/react-dom": "19.1.9",
-    "@typescript/native-preview": "7.0.0-dev.20250908.1",
+    "@typescript/native-preview": "7.0.0-dev.20260103.1",
     "@vitejs/plugin-react": "5.0.2",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "3.2.4",

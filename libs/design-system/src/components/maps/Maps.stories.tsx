@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import preview from '../../../.storybook/preview';
 
 import { Coordinates, Maps } from './Maps';
 
@@ -6,7 +6,7 @@ import { Coordinates, Maps } from './Maps';
  * Meta data for the `Maps` component.
  * This comment will show up as the main opening paragraph in Storybook's Autodocs.
  */
-const meta: Meta<typeof Maps> = {
+const meta = preview.meta({
   component: Maps,
   title: 'Maps',
   parameters: {
@@ -17,17 +17,13 @@ const meta: Meta<typeof Maps> = {
     latitude: 46.971161,
     longitude: 5.885981,
   },
-};
-
-export default meta;
-
-type Story = StoryObj<typeof Maps>;
+});
 
 /**
  * Default story for the `Maps` component.
  * This comment will show up as the story's description in Storybook's Autodocs.
  */
-export const Default: Story = {
+export const Default = meta.story({
   parameters: {
     actions: { disable: true },
     chromatic: { disableSnapshot: true },
@@ -35,9 +31,9 @@ export const Default: Story = {
   args: {
     // complete the args!
   },
-};
+});
 
-export const WithClick: Story = {
+export const WithClick = meta.story({
   args: {
     latitude: 46.971161,
     longitude: 5.885981,
@@ -49,4 +45,4 @@ export const WithClick: Story = {
 
     return <Maps {...args} onCoordinatesChange={handleClick} />;
   },
-};
+});

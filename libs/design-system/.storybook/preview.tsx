@@ -1,9 +1,9 @@
 import '../src/ds.css';
 import { IntlProvider } from 'react-intl';
-import { Preview } from '@storybook/react-vite';
+import { definePreview } from '@storybook/react-vite';
 import fr from '../i18n/fr-FR.json';
 
-const preview: Preview = {
+export default definePreview({
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
@@ -13,6 +13,7 @@ const preview: Preview = {
       },
     },
   },
+
   decorators: [
     (Story) => {
       return (
@@ -22,6 +23,6 @@ const preview: Preview = {
       );
     },
   ],
-};
 
-export default preview;
+  addons: []
+});

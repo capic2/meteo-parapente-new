@@ -8,7 +8,7 @@ describe('meteoParapente', () => {
       latitude: 46.971161,
       longitude: 5.885981,
       hourRanges: ['09-12', '12-16', '16-19'],
-      date: new Date('2025-08-19 00:00:00 GMT+2'),
+      date: new Date('2025-08-19'),
     });
 
     const expected: MeteoStandardProviderStructure = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import preview from '../../../.storybook/preview';
 import { DataTable } from './DataTable';
 import { DataTableHeader } from './parts/DataTableHeader';
 import { DataTableRow } from './parts/DataTableRow';
@@ -7,15 +7,12 @@ import { DataTableCell } from './parts/DataTableCell';
 import { DataTableRowHeader } from './parts/DataTableRowHeader';
 import { Spinner } from '../spinner/Spinner';
 
-const meta = {
+const meta = preview.meta({
   component: DataTable,
   title: 'DataTable',
-} satisfies Meta<typeof DataTable>;
-export default meta;
+});
 
-type Story = StoryObj<typeof DataTable>;
-
-export const Primary: Story = {
+export const Primary = meta.story({
   args: {},
   render: (args) => (
     <DataTable {...args}>
@@ -53,9 +50,9 @@ export const Primary: Story = {
       </DataTableBody>
     </DataTable>
   ),
-};
+});
 
-export const Loading: Story = {
+export const Loading = meta.story({
   args: {
     isLoading: true,
   },
@@ -67,15 +64,12 @@ export const Loading: Story = {
         <DataTableHeader>12h - 16h</DataTableHeader>
         <DataTableHeader>16h - 19h</DataTableHeader>
       </DataTableRow>
-      <DataTableBody>
-        aaa
-      </DataTableBody>
+      <DataTableBody>aaa</DataTableBody>
     </DataTable>
   ),
-};
+});
 
-
-export const WithCustomLoading: Story = {
+export const WithCustomLoading = meta.story({
   args: {
     isLoading: true,
     children: [],
@@ -83,32 +77,34 @@ export const WithCustomLoading: Story = {
   render: (args) => (
     <DataTable isLoading={args.isLoading}>
       <DataTableRow>
-        <DataTableHeader isRowHeader={true}/>
+        <DataTableHeader isRowHeader={true} />
         <DataTableHeader>09h - 12h</DataTableHeader>
         <DataTableHeader>12h - 16h</DataTableHeader>
         <DataTableHeader>16h - 19h</DataTableHeader>
       </DataTableRow>
-      <DataTableBody renderLoadingBodyContentState={
-        <>
-          <DataTableRow>
-            <DataTableRowHeader>header 1</DataTableRowHeader>
-            <DataTableCell colSpan={999} rowSpan={999}>
-              <div className="flex flex-col justify-center py-8 items-center">
-                <Spinner />
-                This is the loading state
-              </div>
-            </DataTableCell>
-          </DataTableRow>
-        <DataTableRow>
-          <DataTableRowHeader>header 2</DataTableRowHeader>
-        </DataTableRow>
-        <DataTableRow>
-          <DataTableRowHeader>header 3</DataTableRowHeader>
-        </DataTableRow>
+      <DataTableBody
+        renderLoadingBodyContentState={
+          <>
+            <DataTableRow>
+              <DataTableRowHeader>header 1</DataTableRowHeader>
+              <DataTableCell colSpan={999} rowSpan={999}>
+                <div className="flex flex-col justify-center py-8 items-center">
+                  <Spinner />
+                  This is the loading state
+                </div>
+              </DataTableCell>
+            </DataTableRow>
+            <DataTableRow>
+              <DataTableRowHeader>header 2</DataTableRowHeader>
+            </DataTableRow>
+            <DataTableRow>
+              <DataTableRowHeader>header 3</DataTableRowHeader>
+            </DataTableRow>
           </>
-        }>
+        }
+      >
         {args.children}
       </DataTableBody>
     </DataTable>
   ),
-}
+});

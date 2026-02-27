@@ -1,10 +1,10 @@
-import { Index } from '../routes';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import preview from '../../.storybook/preview';
+import { Index } from './index';
 import { delay, http, HttpResponse } from 'msw';
 import structureJson from '../../mocks/structure.json' with { type: 'json' };
 import meteoJson from '../../mocks/meteo.json' with { type: 'json' };
 
-const meta = {
+const meta = preview.meta({
   component: Index,
   title: 'App',
   parameters: {
@@ -12,14 +12,11 @@ const meta = {
       initialEntries: ['/?startDate="20250910"&lat=46.971161&lon=5.885981'],
       initialIndex: 0,
     },
-    date: new Date(2025,8,10),
+    date: new Date(2025, 8, 10),
   },
-} satisfies Meta<typeof Index>;
-export default meta;
+});
 
-type Story = StoryObj<typeof Index>;
-
-export const Primary: Story = {
+export const Primary = meta.story({
   parameters: {
     msw: {
       handlers: [
@@ -31,10 +28,10 @@ export const Primary: Story = {
         }),
       ],
     },
-  }
-};
+  },
+});
 
-export const NoData: Story = {
+export const NoData = meta.story({
   parameters: {
     msw: {
       handlers: [
@@ -43,18 +40,18 @@ export const NoData: Story = {
         }),
       ],
     },
-  }
-};
+  },
+});
 
-export const DataLoading: Story = {
+export const DataLoading = meta.story({
   parameters: {
     msw: {
       handlers: [
-        http.get(`http://localhost:3000/meteo`, async() => {
+        http.get(`http://localhost:3000/meteo`, async () => {
           await delay('infinite');
-          return new Response()
+          return new Response();
         }),
       ],
     },
-  }
-};
+  },
+});

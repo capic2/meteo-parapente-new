@@ -1,14 +1,14 @@
 import preview from '../../../.storybook/preview';
 
-import { Spinner } from './Spinner';
+import { Form } from './Form';
 
 /**
- * Meta data for the `Spinner` component.
+ * Meta data for the `Form` component.
  * This comment will show up as the main opening paragraph in Storybook's Autodocs.
  */
 const meta = preview.meta({
-  component: Spinner,
-  title: 'Spinner',
+  component: Form,
+  title: 'Form',
   parameters: {
     layout: 'centered',
   },
@@ -16,7 +16,7 @@ const meta = preview.meta({
 });
 
 /**
- * Default story for the `Spinner` component.
+ * Default story for the `Form` component.
  * This comment will show up as the story's description in Storybook's Autodocs.
  */
 export const Default = meta.story({
@@ -26,17 +26,5 @@ export const Default = meta.story({
   },
   args: {
     // complete the args!
-  },
-});
-
-export const Size20 = meta.story({
-  args: {
-    size: 20,
-  },
-});
-
-export const Size24 = meta.story({
-  args: {
-    size: 24,
   },
 });

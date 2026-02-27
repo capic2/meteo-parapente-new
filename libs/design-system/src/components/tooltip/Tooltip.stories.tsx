@@ -1,20 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import preview from '../../../.storybook/preview';
 import { Tooltip } from './Tooltip';
 
-const meta = {
+const meta = preview.meta({
   component: Tooltip,
   title: 'Tooltip',
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof Tooltip>;
-export default meta;
+});
 
-type Story = StoryObj<typeof Tooltip>;
-
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     content: <>Tooltip</>,
     children: <>I am a button</>,
   },
-};
+});

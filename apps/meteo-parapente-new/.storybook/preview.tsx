@@ -1,6 +1,6 @@
 import { initialize, mswLoader } from 'storybook-msw-addon';
 import { http, HttpResponse } from 'msw';
-import { Preview, StoryContext } from '@storybook/react-vite';
+import { StoryContext, definePreview } from '@storybook/react-vite';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import meteoJsonMock from '../mocks/meteo.json' with { type: 'json' };
 import '../src/styles.css';
@@ -14,10 +14,11 @@ import {
   createRouter,
   ErrorComponent,
   Outlet,
-  RouterProvider
+  RouterProvider,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { mockDateDecorator } from 'storybook-mock-date-decorator';
+import "../src/styles.css"
 
 void initialize();
 
@@ -33,7 +34,7 @@ interface RouterDecoratorContext extends StoryContext {
 
 const queryClient = new QueryClient();
 
-const preview: Preview = {
+export default definePreview({
   parameters: {
     msw: {
       handlers: [
@@ -43,6 +44,7 @@ const preview: Preview = {
       ],
     },
   },
+
   decorators: [
     mockDateDecorator,
     (Story, { parameters }: RouterDecoratorContext) => {
@@ -66,8 +68,8 @@ const preview: Preview = {
             path,
             getParentRoute: () => rootRoute,
             component: Story,
-          })
-        )
+          }),
+        ),
       );
 
       const router = createRouter({
@@ -83,15 +85,16 @@ const preview: Preview = {
     (Story) => {
       return (
         <QueryClientProvider client={queryClient}>
-          <IntlProvider locale="fr-FR" messages={{...fr, ...dsFr}}>
+          <IntlProvider locale="fr-FR" messages={{ ...fr, ...dsFr }}>
             <Story />
           </IntlProvider>
         </QueryClientProvider>
       );
     },
   ],
+
   // Provide the MSW addon loader globally
   loaders: [mswLoader],
-};
 
-export default preview;
+  addons: []
+});
